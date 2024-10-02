@@ -1,0 +1,25 @@
+[
+    {
+        "username": "username",
+        "email": "email@email.com",
+        "password": "password",
+        "courses": [
+            {
+                "courseID": "course-1234",
+                "courseProgress": "progress"
+            }
+        ],
+        "progress":{
+            "course-1234": "progress"
+        },
+        "completedCourses":[
+            "course-4321"
+        ],
+        "currentCourse": "course-1234",
+        "languages": [
+            "Spanish"
+        ],
+        "currentLanguage": "French",
+        "uuid": "user-1234"
+    }
+]

@@ -1,0 +1,35 @@
+[
+    {
+        "courseID": "courseID",
+        "name": "Spanish Beginner",
+        "description": "Description",
+        "userAccess": true,
+        "courseProgress": "progress",
+        "completed": false,
+        "lessons": [
+            {
+                "lessonID": "lessonID",
+                "lessonProgress": "progress",
+                "description": "Description",
+                "words": ["words"],
+                "questions":[
+                    {
+                        "questionID": "id",
+                        "content": "content",
+                        "correctAnswer": "correctAnswer",
+                        "userAnswer": ""
+                    }
+                ]
+            }
+        ],
+        "assessments": [
+            {
+                "assessmentID": "assessmentID",
+                "type": "assessmentType",
+                "userScore": "userScore",
+                "attempts": "attempts"
+            }
+        ],
+        "keyWords": ["keywords"]
+    }
+]

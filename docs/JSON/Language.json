@@ -1,0 +1,23 @@
+[
+    {
+        "languageId": "languageID",
+        "name": "languageName",
+        "user": "user-1234",
+        "coursePercentage": "percentage",
+        "totalPercentage": "total-percentage",
+        "languageProgress": "language-progress",
+        "keywords": ["keywords"],
+        "completedCourses":[
+            "course4321"
+        ],
+        "completedAssessments": [
+            {
+                "assessmentID": "assessmentID",
+                "score": "score"
+            }
+        ],
+        "courseAccess":{
+            "course-1234": "true"
+        }
+    }
+]
