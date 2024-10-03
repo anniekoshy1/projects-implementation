@@ -1,3 +1,4 @@
+import java.lang.ProcessBuilder.Redirect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -7,13 +8,13 @@ public class Assessment {
     // Attributes
     private Type type;
     private int userScore;
-    private List<Question> questions;
+    private List<Questions> questions;
     private ArrayList<Assessment> completedAssessments;
     private int attempts;
     private UUID id;
 
     // Constructor
-    public Assessment(Type type, List<Question> questions) {
+    public Assessment(Type type, List<Questions> questions) {
         this.type = type;
         this.userScore = 0;
         this.questions = questions;

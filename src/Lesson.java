@@ -8,7 +8,7 @@ public class Lesson {
     private String description;
     private ArrayList<Word> words;
     private Dictionary topic;
-    private ArrayList<Question> questions;
+    private ArrayList<Questions> questions;
     private ArrayList<String> historicalFacts;
     private ArrayList<String> culturalFigures;
     private ArrayList<String> holidays;
@@ -49,11 +49,11 @@ public class Lesson {
         words.add(word);
     }
 
-    public ArrayList<Question> getQuestions() {
+    public ArrayList<Questions> getQuestions() {
         return questions;
     }
 
-    public void addQuestion(Question question) {
+    public void addQuestion(Questions question) {
         questions.add(question);
     }
 
