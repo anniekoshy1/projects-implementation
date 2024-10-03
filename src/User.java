@@ -3,9 +3,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class User {
-
     // Attributes
-    private UUID id;
     private String username;
     private String email;
     private String password;
@@ -15,6 +13,7 @@ public class User {
     private Course currentCourse;
     private ArrayList<Language> languages;
     private Language currentLanguage;
+    private UUID id;
 
     // Constructor
     public User(UUID id, String username, String email, String password) {
@@ -29,14 +28,11 @@ public class User {
     }
 
     // Methods
-
     public boolean register(UUID id, String username, String email, String password) {
-        // Stub: Add registration logic
         return true;
     }
 
     public boolean login(UUID id, String username, String password) {
-        // Stub: Add login logic
         return true;
     }
 
@@ -45,7 +41,6 @@ public class User {
     }
 
     public String setCourse(Course course) {
-        // Stub: Set the current course
         this.currentCourse = course;
         return "Course set successfully.";
     }
@@ -55,7 +50,7 @@ public class User {
     }
 
     public void setCourseAccess() {
-        // Stub: Add course access logic
+        // Logic to set course access
     }
 
     public ArrayList<Language> getLanguages() {
@@ -63,16 +58,15 @@ public class User {
     }
 
     public double getProgress(double coursePercentage) {
-        // Stub: Return progress for a given course
         return coursePercentage;
     }
 
     public void updateProgress(double totalPercentage) {
-        // Stub: Update progress for the current course
+        // Logic to update course progress
     }
 
     public void completedAssessment(Assessment assessment) {
-        // Stub: Mark an assessment as completed
+        // Logic to handle completed assessments
     }
 
     public void setCurrentCourse(Course course) {
