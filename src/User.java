@@ -27,6 +27,38 @@ public class User {
         this.languages = new ArrayList<>();
     }
 
+    public String getUsername() {
+        return this.username;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public static boolean validEmail(String email) {
+        return email.contains("@") && email.contains(".");
+    }
+
+    public HashMap<Course, Double> getProgress() {
+        return new HashMap<>(this.progress);
+    }
+
+    public Course getCurrentCourse() {
+        return this.currentCourse;
+    }
+
+    public UUID getId() {
+        return this.id;
+    }
+
+    public Language getCurrentLanguage() {
+        return this.currentLanguage;
+    }
+
     // Methods
     public boolean register(UUID id, String username, String email, String password) {
         return true;
