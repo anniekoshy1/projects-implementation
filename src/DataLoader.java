@@ -29,6 +29,10 @@ public class DataLoader {
             System.out.println("Username: " + user.getUsername() + ", Password: " + user.getPassword());
         }
 
+        User user2 = userList.get(1); 
+        System.out.println("\n--- Displaying User2 ---");
+        System.out.println("Username: " + user2.getUsername() + ", Password: " + user2.getPassword());
+
         System.out.println("Program terminated.");
     }
 
