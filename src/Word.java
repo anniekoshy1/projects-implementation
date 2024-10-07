@@ -3,7 +3,6 @@ import java.util.UUID;
 
 public class Word {
 
-    // Attributes
     private String text;
     private String language;
     private String partOfSpeech;
@@ -12,7 +11,6 @@ public class Word {
     private ArrayList<Lesson> lessonsIntroduced;
     private UUID id;
 
-    // Constructor
     public Word(String text, String language, String partOfSpeech, String definition) {
         this.text = text;
         this.language = language;
@@ -23,7 +21,6 @@ public class Word {
         this.id = generateUUID();
     }
 
-    // Methods
     public String getText() {
         return text;
     }
