@@ -24,6 +24,24 @@ public class User {
         this.completedCourses = new ArrayList<>();
         this.languages = new ArrayList<>();
     }
+
+    public static boolean validEmail(String email) {
+        return email.contains("@") && email.contains(".");
+    }
+
+    public HashMap<Course, Double> getProgress() {
+        return new HashMap<>(this.progress);
+    }
+
+    public Course getCurrentCourse() {
+        return this.currentCourse;
+    }
+
+    public Language getCurrentLanguage() {
+        return this.currentLanguage;
+    }
+
+    // Methods
     // Register a user 
     public boolean register(UUID id, String username, String email, String password) {
         if (username == null || email == null || password == null) {

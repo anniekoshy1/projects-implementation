@@ -1,17 +1,15 @@
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class UserList {
 
-    // Attributes
     private static UserList instance;
     private ArrayList<User> users;
 
-    // Constructor
     private UserList() {
         users = new ArrayList<>();
     }
 
-    // Method to get the singleton instance
     public static UserList getInstance() {
         if (instance == null) {
             instance = new UserList();
@@ -19,33 +17,49 @@ public class UserList {
         return instance;
     }
 
-    // Methods
-    public User getUser(String username, String password) {
-        // No code for now
-        return null;
+    //adding to check for duplicate username or emails 
+    private boolean userExists(String username, String email) {
+        for (User user : users) {
+            if (user.getUsername().equals(username) || user.getEmail().equals(email)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public User addUser(String username, String password) {
-        // No code for now
+    public User addUser(String username, String password, String email) {
+
+        if(userExists(username, email)) {
+            System.out.println("User with this username or email already exists.");
+            return null;
+        }
+        UUID newId = UUID.randomUUID();
+        User newUser = new User(newId, username, email, password);
+        users.add(newUser);
+        return newUser;
+    }
+
+    public User getUser(String username, String password) {
+        for (User user : users) {
+            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+                return user;
+            }
+        }
         return null;
     }
 
     public boolean removeUser(User user) {
-        // No code for now
-        return false;
+        return users.remove(user);
     }
 
     public ArrayList<User> getAllUsers() {
-        // No code for now
-        return new ArrayList<>();
+        return users;
     }
 
     public boolean containsUser(User user) {
-        // No code for now
-        return false;
+        return users.contains(user);
     }
 
     public void save() {
-        // No code for now
     }
 }

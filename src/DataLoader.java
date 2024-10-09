@@ -1,4 +1,11 @@
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 
 public class DataLoader {
 
@@ -21,7 +28,19 @@ public class DataLoader {
     }
 
     public ArrayList<User> getUsers() {
-        return new ArrayList<>();
+        ArrayList<User> users = new ArrayList<User>();
+
+        try {
+            FileReader reader = new FileReader(USER_USERNAME);
+            JSONParser parser = new JSONParser();
+            JSONArray peopleJSON = (JSONArray) parser.parse(reader);
+
+            // Further parsing logic goes here (e.g., convert each JSON object into a User object)
+
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public boolean confirmUser(String username, String password) {
