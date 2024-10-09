@@ -1,21 +1,21 @@
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class StarterTest {
 
-    // Attributes
     private ArrayList<Questions> questions;
     private int score;
 
-    // Constructor
     public StarterTest() {
         this.questions = new ArrayList<>();
         this.score = 0;
     }
 
-    // Methods
     public Questions getQuestion() {
-        // Logic to return a question from the list
-        return questions.isEmpty() ? null : questions.get(0);
+        if (!questions.isEmpty()) {
+            return questions.remove(0);
+        }
+        return null;
     }
 
     public boolean hasMoreQuestions() {
@@ -27,7 +27,6 @@ public class StarterTest {
     }
 
     public void gotWrong() {
-        // No code for now
     }
 
     public int getScore() {
@@ -36,6 +35,6 @@ public class StarterTest {
 
     public void resetTest() {
         this.score = 0;
-        // Logic to reset the test, like shuffling questions if needed
+        Collections.shuffle(questions);
     }
 }

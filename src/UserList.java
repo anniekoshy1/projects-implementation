@@ -27,12 +27,34 @@ public class UserList {
         return false;
     }
 
+    private boolean validatePassword(String password) {
+        if (password.length() < 8) {
+            System.out.println("Password much be at least 8 characters long.");
+            return false;
+        } 
+        if (!password.matches(".*\\d.*")) {
+            System.out.println("Password much contain at least one number.");
+            return false;
+        }
+        if (!password.matches(".*[!@#$%^&*].")) {
+            System.out.println("Password must contain at least one special character.");
+            return false;
+        }
+        return true;
+        }
+
     public User addUser(String username, String password, String email) {
 
         if(userExists(username, email)) {
             System.out.println("User with this username or email already exists.");
             return null;
         }
+
+        if(!validatePassword(password)){
+            System.out.println("Password does not meet the requirements.");
+            return null;
+        }
+
         UUID newId = UUID.randomUUID();
         User newUser = new User(newId, username, email, password);
         users.add(newUser);
