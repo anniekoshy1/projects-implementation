@@ -50,10 +50,54 @@ public class DataLoader {
                 String email = (String) userJson.get("email");
                 String password = (String) userJson.get("password");
 
-                // Create a new User object and add it to the list.
-                User user = new User(id, username, email, password);
-                users.add(user);
+                JSONArray coursesJson = (JSONArray) userJson.get("courses");
+            ArrayList<Course> courses = new ArrayList<>();
+            for (Object courseObj : coursesJson) {
+                JSONObject courseJson = (JSONObject) courseObj;
+                UUID courseID = UUID.fromString((String) courseJson.get("courseID"));
+                double courseProgress = (Double) courseJson.get("courseProgress");
+                courses.add(new Course(courseID, courseProgress));
             }
+
+            // Handle progress, completed courses, and current course
+            JSONObject progressJson = (JSONObject) userJson.get("progress");
+            // Convert progress to a Map or handle as needed
+            Map<UUID, Double> progress = new HashMap<>();
+            for (Object key : progressJson.keySet()) {
+                UUID courseId = UUID.fromString((String) key);
+                double courseProgress = (Double) progressJson.get(key);
+                progress.put(courseId, courseProgress);
+            }
+
+            JSONArray completedCoursesJson = (JSONArray) userJson.get("completedCourses");
+            ArrayList<UUID> completedCourses = new ArrayList<>();
+            for (Object completedCourseId : completedCoursesJson) {
+                completedCourses.add(UUID.fromString((String) completedCourseId));
+            }
+
+            // Extract current course
+            JSONObject currentCourseJson = (JSONObject) userJson.get("currentCourse");
+            UUID currentCourseID = UUID.fromString((String) currentCourseJson.get("courseID"));
+
+            // Extract languages
+            JSONArray languagesJson = (JSONArray) userJson.get("languages");
+            ArrayList<Language> languages = new ArrayList<>();
+            for (Object languageObj : languagesJson) {
+                JSONObject languageJson = (JSONObject) languageObj;
+                UUID languageID = UUID.fromString((String) languageJson.get("languageID"));
+                String languageName = (String) languageJson.get("name");
+                languages.add(new Language(languageID, languageName));
+            }
+
+            // Extract current language
+            JSONObject currentLanguageJson = (JSONObject) userJson.get("currentLanguage");
+            UUID currentLanguageID = UUID.fromString((String) currentLanguageJson.get("languageID"));
+            String currentLanguageName = (String) currentLanguageJson.get("name");
+
+            // Create a new User object and add it to the list.
+            User user = new User(id, username, email, password, courses, progress, completedCourses, currentCourseID, languages, currentLanguageID, currentLanguageName);
+            users.add(user);
+        }
             System.out.println("Users loaded successfully.");
         } catch (IOException | ParseException e) {
             System.err.println("Error loading users: " + e.getMessage());
