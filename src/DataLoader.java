@@ -1,14 +1,16 @@
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 
 public class DataLoader {
-
+    private static final String USERS_FILE = "user.json";
     private ArrayList<User> users = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -28,27 +30,53 @@ public class DataLoader {
     }
 
     public ArrayList<User> getUsers() {
-        ArrayList<User> users = new ArrayList<User>();
+        ArrayList<User> users = new ArrayList<>();
+        JSONParser jsonParser = new JSONParser();
 
-        try {
-            FileReader reader = new FileReader(USER_USERNAME);
-            JSONParser parser = new JSONParser();
-            JSONArray peopleJSON = (JSONArray) parser.parse(reader);
+        try (FileReader fileReader = new FileReader(USERS_FILE)) {
+            // Parse the JSON file into an Object.
+            Object obj = jsonParser.parse(fileReader);
+            // Cast the parsed object into a JSONArray.
+            JSONArray userArray = (JSONArray) obj;
 
-            // Further parsing logic goes here (e.g., convert each JSON object into a User object)
+            // Iterate through each object in the JSONArray.
+            for (Object userObject : userArray) {
+                // Cast each object into a JSONObject.
+                JSONObject userJson = (JSONObject) userObject;
 
+                // Extract user attributes from the JSONObject.
+                UUID id = UUID.fromString((String) userJson.get("id"));
+                String username = (String) userJson.get("username");
+                String email = (String) userJson.get("email");
+                String password = (String) userJson.get("password");
+
+                // Create a new User object and add it to the list.
+                User user = new User(id, username, email, password);
+                users.add(user);
+            }
+            System.out.println("Users loaded successfully.");
         } catch (IOException | ParseException e) {
-            e.printStackTrace();
+            System.err.println("Error loading users: " + e.getMessage());
         }
-
+        return users;
     }
 
     public boolean confirmUser(String username, String password) {
+        ArrayList<User> users = getUsers();
+        for (User user : users){
+            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+                return true;
+            }
+        }
         return false;
     }
 
     public ArrayList<Course> getCourses() {
-        return new ArrayList<>();
+        ArrayList<Course> courses = new ArrayList<>();
+        JSONParser jsonParser = new JSONParser();
+
+        
+        return false;
     }
 
     public ArrayList<Language> getLanguages() {

@@ -4,19 +4,33 @@ import java.util.ArrayList;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 public class DataWriter {
 
     private boolean isDataBaseConnected;
     private int maxUsers = 100000;
     private int maxCourses = 500;
 
+<<<<<<< HEAD
     private static final String USER_DATA_FILE = "users.json";
     private static final String COURSE_DATA_FILE = "courses.json";
     private static final String LANGUAGE_DATA_FILE = "languages.json";
 
+=======
+    private static final String USERS_FILE = "user.json";
+    private static final String COURSES_FILE = "courses.json";
+    private static final String LANGUAGES_FILE = "language.json";
+    private static final String LESSONS_FILE = "lessons.json";
+
+
+    // Constructor
+>>>>>>> 1c657970e10471a114d77874975a43e6f10577be
     public DataWriter() {
     }
 
+<<<<<<< HEAD
     public boolean saveUsers(ArrayList<User> users) {
         JSONArray usersJSON = new JSONArray();
 
@@ -25,9 +39,48 @@ public class DataWriter {
         }
 
         return writeToFile(USER_DATA_FILE, usersJSON);
+=======
+    // Methods
+    @SuppressWarnings("unchecked")
+	public boolean saveUsers(ArrayList<User> users) {
+        if (users.size() > maxUsers) {
+            System.err.println("Cannot save users: maximum user limit reached.");
+            return false;
+        }
+
+        JSONArray userArray = new JSONArray();
+
+        for (User user : users) {
+            JSONObject userJson = new JSONObject();
+            userJson.put("id", user.getId().toString());
+            userJson.put("username", user.getUsername());
+            userJson.put("email", user.getEmail());
+            userJson.put("password", user.getPassword());
+
+            // Add user object to JSON array.
+            userArray.add(userJson);
+        }
+
+        return writeToFile(USERS_FILE, userArray);
+    }
+
+    private boolean writeToFile(String filePath, JSONArray jsonArray) {
+    try (FileWriter fileWriter = new FileWriter(filePath)) {
+        // Write the JSON array as a string to the file.
+        fileWriter.write(jsonArray.toJSONString());
+        fileWriter.flush();
+        System.out.println("Data saved successfully to " + filePath);
+        return true;
+    } catch (IOException e) {
+        // Print an error message if writing fails.
+        System.err.println("Error writing data to " + filePath + ": " + e.getMessage());
+        return false;
+>>>>>>> 1c657970e10471a114d77874975a43e6f10577be
+    }
     }
 
     public boolean saveCourses(ArrayList<Course> courses) {
+<<<<<<< HEAD
         JSONArray coursesJSON = new JSONArray();
 
         for (Course course : courses) {
@@ -35,6 +88,21 @@ public class DataWriter {
         }
 
         return writeToFile(COURSE_DATA_FILE, coursesJSON);
+=======
+        JSONArray courseArray = new JSONArray();
+
+        for (Course course : courses) {
+            JSONObject courseJson = new JSONObject();
+            courseJson.put("id", course.getId().toString());
+            courseJson.put("name", course.getName());
+            courseJson.put("description", course.getDescription());
+
+            // Add course object to JSON array.
+            courseArray.add(courseJson);
+        }
+
+        return writeToFile(COURSES_FILE, courseArray);
+>>>>>>> 1c657970e10471a114d77874975a43e6f10577be
     }
 
     public boolean saveLanguages(ArrayList<Language> languages) {
@@ -58,11 +126,19 @@ public class DataWriter {
 
     public boolean connectToDatabase() {
         isDataBaseConnected = true;
+<<<<<<< HEAD
+=======
+        System.out.println("Database connected.");
+>>>>>>> 1c657970e10471a114d77874975a43e6f10577be
         return isDataBaseConnected;
     }
 
     public boolean disconnectFromDatabase() {
         isDataBaseConnected = false;
+<<<<<<< HEAD
+=======
+        System.out.println("Database disconnected");
+>>>>>>> 1c657970e10471a114d77874975a43e6f10577be
         return !isDataBaseConnected;
     }
 
