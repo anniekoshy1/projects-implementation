@@ -17,15 +17,17 @@ public class UserList {
         return instance;
     }
 
-    //adding to check for duplicate username or emails 
-    private boolean userExists(String username, String email) {
+    private String userExists(String username, String email) {
         for (User user : users) {
-            if (user.getUsername().equals(username) || user.getEmail().equals(email)) {
-                return true;
+            if (user.getUsername().equals(username)) {
+                return "Username already exists.";
+            }
+            if (user.getEmail().equals(email)) {
+                return "Email already registered.";
             }
         }
-        return false;
-    }
+            return null;
+        }
 
     private boolean validatePassword(String password) {
         if (password.length() < 8) {
@@ -36,7 +38,7 @@ public class UserList {
             System.out.println("Password much contain at least one number.");
             return false;
         }
-        if (!password.matches(".*[!@#$%^&*].")) {
+        if (!password.matches(".*[!@#$%^&*]")) {
             System.out.println("Password must contain at least one special character.");
             return false;
         }
@@ -44,9 +46,15 @@ public class UserList {
         }
 
     public User addUser(String username, String password, String email) {
+        String existsMessage = userExists(username, email);
 
-        if(userExists(username, email)) {
-            System.out.println("User with this username or email already exists.");
+        if(existsMessage != null) {
+            System.out.println(existsMessage);
+            return null;
+        }
+
+        if(!User.validEmail(email)) {
+            System.out.println("Invalid email format.");
             return null;
         }
 

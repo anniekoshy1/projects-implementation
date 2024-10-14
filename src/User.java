@@ -44,7 +44,7 @@ public class User {
     // Methods
     // Register a user 
     public boolean register(UUID id, String username, String email, String password) {
-        if (username == null || email == null || password == null) {
+        if (username == null || email == null || password == null || !validEmail(email)) {
             return false; 
             // Registration failed due to missing information
         }
@@ -112,7 +112,7 @@ public class User {
             if (currentProgress == 100.0) {
                 completedCourses.add(currentCourse);
                 courses.remove(currentCourse);
-                System.out.println("Course completed: " + currentCourse.getCourseName());
+                System.out.println("Course completed: " + currentCourse.getName());
             }
         }
     }
