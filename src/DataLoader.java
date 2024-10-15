@@ -1,6 +1,8 @@
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.json.simple.JSONArray;
@@ -10,7 +12,8 @@ import org.json.simple.parser.ParseException;
 
 
 public class DataLoader {
-    private static final String USERS_FILE = "user.json";
+    private static final String USERS_FILE = "docs/JSON/User.json";
+    private static final String COURSES_FILE = "docs/JSON/Courses.json";
     private ArrayList<User> users = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -115,12 +118,67 @@ public class DataLoader {
         return false;
     }
 
-    public ArrayList<Course> getCourses() {
+ public ArrayList<Course> getCourses() {
         ArrayList<Course> courses = new ArrayList<>();
         JSONParser jsonParser = new JSONParser();
 
-        
-        return false;
+        try (FileReader fileReader = new FileReader(COURSES_FILE)) {
+            Object obj = jsonParser.parse(fileReader);
+            JSONArray courseArray = (JSONArray) obj;
+
+            // Iterate through each object in the JSONArray.
+            for (Object courseObject : courseArray) {
+                // Cast each object into a JSONObject.
+                JSONObject courseJson = (JSONObject) courseObject;
+
+                // Extract course attributes from the JSONObject.
+                UUID courseID = UUID.fromString((String) courseJson.get("courseID"));
+                String name = (String) courseJson.get("name");
+                String description = (String) courseJson.get("description");
+                boolean userAccess = (boolean) courseJson.get("userAccess");
+                double courseProgress = ((Number) courseJson.get("courseProgress")).doubleValue();
+                boolean completed = (boolean) courseJson.get("completed");
+
+                // Parse lessons
+                JSONArray lessonsJson = (JSONArray) courseJson.get("lessons");
+                ArrayList<Lesson> lessons = new ArrayList<>();
+                for (Object lessonObject : lessonsJson) {
+                    JSONObject lessonJson = (JSONObject) lessonObject;
+                    UUID lessonID = UUID.fromString((String) lessonJson.get("lessonID"));
+                    double lessonProgress = ((Number) lessonJson.get("lessonProgress")).doubleValue();
+                    String lessonDescription = (String) lessonJson.get("description");
+
+                    // Create the Lesson object
+                    Lesson lesson = new Lesson(lessonID, lessonProgress, lessonDescription);
+                    lessons.add(lesson);
+                }
+
+                // Parse assessments
+                JSONArray assessmentsJson = (JSONArray) courseJson.get("assessments");
+                ArrayList<Assessment> assessments = new ArrayList<>();
+                for (Object assessmentObject : assessmentsJson) {
+                    JSONObject assessmentJson = (JSONObject) assessmentObject;
+                    UUID assessmentID = UUID.fromString((String) assessmentJson.get("assessmentID"));
+                    String type = (String) assessmentJson.get("type");
+                    String userScore = (String) assessmentJson.get("userScore");
+                    int attempts = ((Number) assessmentJson.get("attempts")).intValue();
+
+                    // Create the Assessment object
+                    Assessment assessment = new Assessment(assessmentID, type, userScore, attempts);
+                    assessments.add(assessment);
+                }
+
+                // Create the Course object
+                Course course = new Course(courseID, name, description, userAccess, courseProgress, completed, lessons, assessments);
+                courses.add(course);
+            }
+
+            System.out.println("Courses loaded successfully.");
+        } catch (IOException | ParseException e) {
+            System.err.println("Error loading courses: " + e.getMessage());
+        }
+
+        return courses;
     }
 
     public ArrayList<Language> getLanguages() {
