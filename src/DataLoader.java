@@ -186,6 +186,38 @@ public class DataLoader {
     }
 
     public void loadUserProgress(User user) {
+        JSONParser jsonParser = new JSONParser();
+
+        try (FileReader fileReader = new FileReader(USERS_FILE)) {
+            // Parse the JSON file
+            Object obj = jsonParser.parse(fileReader);
+            JSONArray usersArray = (JSONArray) obj;
+
+            // Iterate through the JSON array to find the user
+            for (Object userObject : usersArray) {
+                JSONObject userJson = (JSONObject) userObject;
+                String username = (String) userJson.get("username");
+
+                // If the username matches, load the progress
+                if (username.equals(user.getUsername())) {
+                    JSONObject progressJson = (JSONObject) userJson.get("progress");
+                    Map<UUID, Double> progressMap = new HashMap<>();
+
+                    for (Object key : progressJson.keySet()) {
+                        UUID courseId = UUID.fromString((String) key);
+                        double progress = ((Number) progressJson.get(key)).doubleValue();
+                        progressMap.put(courseId, progress);
+                    }
+
+                    user.setProgress(progressMap);
+                    System.out.println("User progress loaded successfully.");
+                    return;
+                }
+            }
+
+        } catch (IOException | ParseException e) {
+            System.err.println("Error loading user progress: " + e.getMessage());
+        }
     }
 
     public ArrayList<Assessment> loadAssessmentHistory(User user) {
