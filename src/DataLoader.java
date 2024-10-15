@@ -32,6 +32,7 @@ public class DataLoader {
         // System.out.println("Program terminated.");
     }
 
+    //done
     public ArrayList<User> getUsers() {
         ArrayList<User> users = new ArrayList<>();
         JSONParser jsonParser = new JSONParser();
@@ -108,6 +109,7 @@ public class DataLoader {
         return users;
     }
 
+    //should be done
     public boolean confirmUser(String username, String password) {
         ArrayList<User> users = getUsers();
         for (User user : users){
@@ -118,7 +120,8 @@ public class DataLoader {
         return false;
     }
 
- public ArrayList<Course> getCourses() {
+    //done
+    public ArrayList<Course> getCourses() {
         ArrayList<Course> courses = new ArrayList<>();
         JSONParser jsonParser = new JSONParser();
 
@@ -181,10 +184,12 @@ public class DataLoader {
         return courses;
     }
 
+    //done
     public ArrayList<Language> getLanguages() {
         return new ArrayList<>();
     }
 
+    //done
     public void loadUserProgress(User user) {
         JSONParser jsonParser = new JSONParser();
 
