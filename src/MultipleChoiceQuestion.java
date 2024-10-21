@@ -1,31 +1,49 @@
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MultipleChoiceQuestion extends Questions {
 
-    // Attributes
-    private String question;
     private ArrayList<String> options;
-    private int correctAnswer;
-    private int usersAnswer;
+    private int correctAnswerIndex;
+    private int usersAnswerIndex;
 
-    // Constructor
-    public MultipleChoiceQuestion(String question, int correctAnswer, ArrayList<String> options) {
-        super(question, options.get(correctAnswer), 0);  // Assuming difficulty is set to 0 for now
-        this.question = question;
-        this.correctAnswer = correctAnswer;
+    public MultipleChoiceQuestion(String question, ArrayList<String> options, int correctAnswerIndex, Difficulty difficulty) {
+        super(question, options.get(correctAnswerIndex), difficulty); 
         this.options = options;
+        this.correctAnswerIndex = correctAnswerIndex;
+        this.usersAnswerIndex = -1; 
     }
 
-    // Methods
     public String getCorrectAnswer() {
-        return options.get(correctAnswer);
+        return options.get(correctAnswerIndex);
     }
 
-    public boolean checkAnswer(int usersAnswer) {
-        return this.correctAnswer == usersAnswer;
+    public void setUsersAnswer(int index) {
+        if (index >= 0 && index < options.size()) {
+            this.usersAnswerIndex = index;
+        } else {
+            System.out.println("Invalid answer index.");
+        }
+    }
+
+    public boolean checkAnswer() {
+        return this.usersAnswerIndex == this.correctAnswerIndex;
     }
 
     public void shuffleQuestions() {
-        // No code for now 
+        Collections.shuffle(options);
+    }
+
+    public ArrayList<String> getOptions() {
+        return options;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder questionDisplay = new StringBuilder(getContent() + "\n");
+        for (int i = 0; i < options.size(); i++) {
+            questionDisplay.append(i + 1).append(". ").append(options.get(i)).append("\n");
+        }
+        return questionDisplay.toString();
     }
 }

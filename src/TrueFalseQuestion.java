@@ -3,8 +3,8 @@ public class TrueFalseQuestion extends Questions {
     private boolean correctAnswer;
     private boolean userAnswer;
 
-    public TrueFalseQuestion(String question, boolean correctAnswer) {
-        super(question, Boolean.toString(correctAnswer), 0); 
+    public TrueFalseQuestion(String question, boolean correctAnswer, Difficulty difficulty) {
+        super(question, Boolean.toString(correctAnswer), difficulty); 
         this.correctAnswer = correctAnswer;
     }
 
@@ -12,8 +12,13 @@ public class TrueFalseQuestion extends Questions {
         this.userAnswer = userAnswer;
     }
 
+    @Override
     public boolean checkAnswer() {
         return this.correctAnswer == this.userAnswer;
     }
 
+    @Override
+    public String toString() {
+        return getContent() + "\n1. True\n2. False";
+    }
 }
