@@ -1,0 +1,52 @@
+{
+    "questions": [
+      {
+        "questionType": "MultipleChoice",
+        "content": "¿Cuál es la palabra correcta para 'apple' en español?",
+        "difficulty": "RUDIMENTARY",
+        "options": [
+          "Manzana",
+          "Plátano",
+          "Pera",
+          "Melocotón"
+        ],
+        "correctAnswerIndex": 0
+      },
+      {
+        "questionType": "TrueFalse",
+        "content": "La palabra 'gato' significa 'cat' en inglés.",
+        "difficulty": "INTERMEDIATE",
+        "correctAnswer": true
+      },
+      {
+        "questionType": "Flashcard",
+        "frontInfo": "Vocabulario: 'Hablar'",
+        "backAnswer": "To Speak",
+        "difficulty": "INTERMEDIATE"
+      },
+      {
+        "questionType": "MultipleChoice",
+        "content": "¿Cuál es el artículo definido correcto para la palabra 'libro'?",
+        "difficulty": "INTERMEDIATE",
+        "options": [
+          "La",
+          "El",
+          "Las",
+          "Los"
+        ],
+        "correctAnswerIndex": 1
+      },
+      {
+        "questionType": "TrueFalse",
+        "content": "En español, 'ser' y 'estar' son verbos que significan 'to be'.",
+        "difficulty": "ADVANCED",
+        "correctAnswer": true
+      },
+      {
+        "questionType": "Flashcard",
+        "frontInfo": "Gramática: 'Conjugación del verbo estar en presente'",
+        "backAnswer": "Estoy, estás, está, estamos, estáis, están",
+        "difficulty": "ADVANCED"
+      }
+    ]
+  }  

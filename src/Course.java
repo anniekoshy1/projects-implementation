@@ -23,6 +23,11 @@ public class Course {
         this.id = UUID.randomUUID();
     }
 
+    public Course(UUID id, double courseProgress){
+        this.id = id;
+        this.courseProgress = courseProgress;
+    }
+
     public String getName() {
         return name;
     }

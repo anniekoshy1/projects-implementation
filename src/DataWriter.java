@@ -19,6 +19,7 @@ public class DataWriter {
     }
 
     //done
+    @SuppressWarnings("unchecked")
     public boolean saveUsers(ArrayList<User> users) {
         if (users.size() > maxUsers) {
             System.err.println("Cannot save users: maximum user limit reached.");
