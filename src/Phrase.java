@@ -57,16 +57,18 @@ public class Phrase {
     }
 
     public String getTranslation(String targetLanguage) {
-        // Logic to get translation of the phrase in the target language
         return "";
     }
 
     public void addTranslation(String targetLanguage, String translation) {
-        // Logic to add translation for the phrase in a specific language
     }
 
     public UUID generateUUID() {
         return UUID.randomUUID();
+    }
+    // Getter for id
+    public UUID getId() {
+        return id;
     }
 
     public void setUUID() {

@@ -7,7 +7,7 @@ public class Lesson {
     private double lessonProgress;
     private String description;
     private ArrayList<Word> words;
-    private Dictionary topic;
+    private Dictionary topic;  
     private ArrayList<Questions> questions;
     private ArrayList<String> historicalFacts;
     private ArrayList<String> culturalFigures;
@@ -27,8 +27,21 @@ public class Lesson {
         this.foods = new ArrayList<>();
         this.id = generateUUID();
     }
+    // Getter for topic
+    public Dictionary getTopic() {
+        return topic;
+    }
 
-    // Methods
+    // Setter for topic
+    public void setTopic(Dictionary topic) {
+        this.topic = topic;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+    
+    // Setters and Getters
     public void setDescription(String description) {
         this.description = description;
     }
@@ -57,26 +70,40 @@ public class Lesson {
         questions.add(question);
     }
 
-    public Lesson getNextLesson() {
-        // Logic to get the next lesson
-        return null;
+    public Lesson getNextLesson(Course course) {
+        
+        return null;  
     }
 
-    public Lesson getPreviousLesson() {
-        // Logic to get the previous lesson
-        return null;
+    public Lesson getPreviousLesson(Course course) {
+    
+        return null;  
     }
 
     public UUID generateUUID() {
         return UUID.randomUUID();
     }
 
-    public void setUUID() {
-        this.id = generateUUID();
+    public UUID getId() {
+        return id;
     }
 
     public String getRandomContent() {
-        // Logic to get random content from historical facts, cultural figures, holidays, or foods
-        return "";
+        // Logic to get random content from available lists
+        ArrayList<String> combinedContent = new ArrayList<>();
+        combinedContent.addAll(historicalFacts);
+        combinedContent.addAll(culturalFigures);
+        combinedContent.addAll(holidays);
+        combinedContent.addAll(foods);
+
+        if (!combinedContent.isEmpty()) {
+            int randomIndex = (int) (Math.random() * combinedContent.size());
+            return combinedContent.get(randomIndex);
+        }
+        return "No content available";
+    }
+    @Override
+    public String toString() {
+    return "Lesson Description: " + description;
     }
 }

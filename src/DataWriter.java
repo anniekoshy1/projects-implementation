@@ -36,6 +36,7 @@ public class DataWriter {
     }
 
     //done
+    @SuppressWarnings("unchecked")
     public boolean saveCourses(ArrayList<Course> courses) {
         if (courses.size() > maxCourses) {
             System.err.println("Cannot save courses: maximum course limit reached.");
@@ -52,6 +53,7 @@ public class DataWriter {
     }
 
     //done
+    @SuppressWarnings("unchecked")
     public boolean saveLanguages(ArrayList<Language> languages) {
         JSONArray languagesJSON = new JSONArray();
 
@@ -85,6 +87,7 @@ public class DataWriter {
     }
 
     //done
+    @SuppressWarnings("unchecked")
     private JSONObject serializeUser(User user) {
         JSONObject userJSON = new JSONObject();
         userJSON.put("id", user.getId().toString());
@@ -108,6 +111,7 @@ public class DataWriter {
     }
 
     //done
+    @SuppressWarnings("unchecked")
     private JSONObject serializeCourse(Course course) {
         JSONObject courseJSON = new JSONObject();
         courseJSON.put("name", course.getName());
@@ -119,6 +123,7 @@ public class DataWriter {
     }
 
     //done
+    @SuppressWarnings("unchecked")
     private JSONObject serializeLanguage(Language language) {
         JSONObject languageJSON = new JSONObject();
         languageJSON.put("name", language.getName());

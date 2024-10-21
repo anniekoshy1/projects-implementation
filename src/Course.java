@@ -36,6 +36,10 @@ public class Course {
         this.name = name;
     }
 
+    public boolean isUserAccess(){
+        return this.userAccess;
+    }
+
     public String getDescription() {
         return description;
     }
