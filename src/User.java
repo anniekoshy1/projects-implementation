@@ -76,26 +76,21 @@ public class User {
         return this.completedCourses;
     }
 
-    // Set access to a course
     public void setCourseAccess() {
         if (!courses.contains(currentCourse)) {
             courses.add(currentCourse); 
-            // Adds the current course to the user's courses
         }
     }
 
-    // Get the list of languages the user is learning
     public ArrayList<Language> getLanguages() {
         return this.languages;
     }
 
-    // Get progress for a course (returns percentage completed)
     public double getProgress(Course course) {
         if (progress.containsKey(course)) {
             return progress.get(course);
         }
         return 0.0; 
-        // No progress if course not found
     }
 
     // Update the progress of the current course

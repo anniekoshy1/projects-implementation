@@ -3,7 +3,6 @@ import java.util.UUID;
 
 public class Course {
 
-    // Attributes
     private String name;
     private String description;
     private boolean userAccess;
@@ -13,18 +12,27 @@ public class Course {
     private ArrayList<String> keyWords;
     private UUID id;
 
-    // Constructor
     public Course(User user) {
-        // Initialize attributes here
+        this.name = "Default Course Name";
+        this.description = "Default Description";
+        this.userAccess = false;
+        this.courseProgress = 0.0; 
         this.lessons = new ArrayList<>();
         this.assessments = new ArrayList<>();
         this.keyWords = new ArrayList<>();
         this.id = UUID.randomUUID();
     }
 
-    // Methods
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setDescription(String description) {
@@ -51,21 +59,20 @@ public class Course {
         return lessons;
     }
 
+    public void addLesson(Lesson lesson) {
+        lessons.add(lesson);
+    }
+
     public ArrayList<Assessment> getAllAssessments() {
         return assessments;
     }
 
-    public ArrayList<String> getCompletedAssessments() {
-        // No code for now
-        return new ArrayList<>();
+    public void addAssessment(Assessment assessment) {
+        assessments.add(assessment);
     }
 
-    public void setCompletedAssessments() {
-        // No code for now
-    }
-
-    public void setCompletedCourse() {
-        // No code for now
+    public ArrayList<String> getKeyWords() {
+        return keyWords;
     }
 
     public void addKeyWord(String keyWord) {
@@ -76,7 +83,19 @@ public class Course {
         return UUID.randomUUID();
     }
 
-    public void setUUID(UUID id) {
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
         this.id = id;
+    }
+
+    public boolean completedCourse() {
+        return courseProgress == 100.0;
+    }
+
+    public void setCompletedCourse() {
+        this.courseProgress = 100.0;
     }
 }
