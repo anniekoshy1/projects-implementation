@@ -4,7 +4,6 @@ import java.util.UUID;
 
 public class Language {
 
-    // Attributes
     private User user;
     private StarterTest starterTest;
     private String name;
@@ -16,7 +15,6 @@ public class Language {
     private ArrayList<Assessment> completedAssessments;
     private HashMap<Course, Boolean> courseAccess;
 
-    // Constructors
     public Language() {
         this.keyWords = new ArrayList<>();
         this.completedCourses = new ArrayList<>();
@@ -24,26 +22,42 @@ public class Language {
         this.courseAccess = new HashMap<>();
     }
 
-    public Language(User user) {
+    public Language(User user, String name) {  
         this();
         this.user = user;
+        this.name = name;
     }
 
-    // Methods
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {  
+        this.name = name;
+    }
+
     public void setCourseAccess(Course course, boolean access) {
-        courseAccess.put(course, access);
+        if (course != null) {
+            courseAccess.put(course, access);
+        } else {
+            System.out.println("Cannot set access for a null course.");
+        }
     }
 
     public double getTotalPercentage() {
         return totalPercentage;
     }
 
+    public void setTotalPercentage(double totalPercentage) {
+        this.totalPercentage = totalPercentage;
+    }
+
     public double getCoursePercentage() {
         return coursePercentage;
+    }
+
+    public void setCoursePercentage(double coursePercentage) {
+        this.coursePercentage = coursePercentage;
     }
 
     public double getLanguageProgress() {
@@ -52,6 +66,14 @@ public class Language {
 
     public void setLanguageProgress(double progress) {
         this.languageProgress = progress;
+    }
+
+    public void addCompletedCourse(Course course) {
+        if (course != null && !completedCourses.contains(course)) {
+            completedCourses.add(course);
+        } else if (course == null) {
+            System.out.println("Cannot add a null course to completed courses.");
+        }
     }
 
     public ArrayList<Course> getCompletedCourses() {
@@ -67,6 +89,14 @@ public class Language {
     }
 
     public void addKeyWord(String keyWord) {
-        keyWords.add(keyWord);
+        if (keyWord != null && !keyWord.trim().isEmpty()) {
+            keyWords.add(keyWord);
+        } else {
+            System.out.println("Invalid keyword.");
+        }
+    }
+
+    public ArrayList<String> getKeyWords() {
+        return keyWords;
     }
 }
