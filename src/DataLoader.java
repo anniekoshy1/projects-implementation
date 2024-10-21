@@ -1,6 +1,8 @@
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.json.simple.JSONArray;
@@ -10,7 +12,8 @@ import org.json.simple.parser.ParseException;
 
 
 public class DataLoader {
-    private static final String USERS_FILE = "user.json";
+    private static final String USERS_FILE = "docs/JSON/User.json";
+    private static final String COURSES_FILE = "docs/JSON/Courses.json";
     private ArrayList<User> users = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -29,6 +32,7 @@ public class DataLoader {
         // System.out.println("Program terminated.");
     }
 
+    //done
     public ArrayList<User> getUsers() {
         ArrayList<User> users = new ArrayList<>();
         JSONParser jsonParser = new JSONParser();
@@ -105,6 +109,7 @@ public class DataLoader {
         return users;
     }
 
+    //should be done
     public boolean confirmUser(String username, String password) {
         ArrayList<User> users = getUsers();
         for (User user : users){
@@ -115,19 +120,109 @@ public class DataLoader {
         return false;
     }
 
+    //done
     public ArrayList<Course> getCourses() {
         ArrayList<Course> courses = new ArrayList<>();
         JSONParser jsonParser = new JSONParser();
 
-        
-        return false;
+        try (FileReader fileReader = new FileReader(COURSES_FILE)) {
+            Object obj = jsonParser.parse(fileReader);
+            JSONArray courseArray = (JSONArray) obj;
+
+            // Iterate through each object in the JSONArray.
+            for (Object courseObject : courseArray) {
+                // Cast each object into a JSONObject.
+                JSONObject courseJson = (JSONObject) courseObject;
+
+                // Extract course attributes from the JSONObject.
+                UUID courseID = UUID.fromString((String) courseJson.get("courseID"));
+                String name = (String) courseJson.get("name");
+                String description = (String) courseJson.get("description");
+                boolean userAccess = (boolean) courseJson.get("userAccess");
+                double courseProgress = ((Number) courseJson.get("courseProgress")).doubleValue();
+                boolean completed = (boolean) courseJson.get("completed");
+
+                // Parse lessons
+                JSONArray lessonsJson = (JSONArray) courseJson.get("lessons");
+                ArrayList<Lesson> lessons = new ArrayList<>();
+                for (Object lessonObject : lessonsJson) {
+                    JSONObject lessonJson = (JSONObject) lessonObject;
+                    UUID lessonID = UUID.fromString((String) lessonJson.get("lessonID"));
+                    double lessonProgress = ((Number) lessonJson.get("lessonProgress")).doubleValue();
+                    String lessonDescription = (String) lessonJson.get("description");
+
+                    // Create the Lesson object
+                    Lesson lesson = new Lesson(lessonID, lessonProgress, lessonDescription);
+                    lessons.add(lesson);
+                }
+
+                // Parse assessments
+                JSONArray assessmentsJson = (JSONArray) courseJson.get("assessments");
+                ArrayList<Assessment> assessments = new ArrayList<>();
+                for (Object assessmentObject : assessmentsJson) {
+                    JSONObject assessmentJson = (JSONObject) assessmentObject;
+                    UUID assessmentID = UUID.fromString((String) assessmentJson.get("assessmentID"));
+                    String type = (String) assessmentJson.get("type");
+                    String userScore = (String) assessmentJson.get("userScore");
+                    int attempts = ((Number) assessmentJson.get("attempts")).intValue();
+
+                    // Create the Assessment object
+                    Assessment assessment = new Assessment(assessmentID, type, userScore, attempts);
+                    assessments.add(assessment);
+                }
+
+                // Create the Course object
+                Course course = new Course(courseID, name, description, userAccess, courseProgress, completed, lessons, assessments);
+                courses.add(course);
+            }
+
+            System.out.println("Courses loaded successfully.");
+        } catch (IOException | ParseException e) {
+            System.err.println("Error loading courses: " + e.getMessage());
+        }
+
+        return courses;
     }
 
+    //done
     public ArrayList<Language> getLanguages() {
         return new ArrayList<>();
     }
 
+    //done
     public void loadUserProgress(User user) {
+        JSONParser jsonParser = new JSONParser();
+
+        try (FileReader fileReader = new FileReader(USERS_FILE)) {
+            // Parse the JSON file
+            Object obj = jsonParser.parse(fileReader);
+            JSONArray usersArray = (JSONArray) obj;
+
+            // Iterate through the JSON array to find the user
+            for (Object userObject : usersArray) {
+                JSONObject userJson = (JSONObject) userObject;
+                String username = (String) userJson.get("username");
+
+                // If the username matches, load the progress
+                if (username.equals(user.getUsername())) {
+                    JSONObject progressJson = (JSONObject) userJson.get("progress");
+                    Map<UUID, Double> progressMap = new HashMap<>();
+
+                    for (Object key : progressJson.keySet()) {
+                        UUID courseId = UUID.fromString((String) key);
+                        double progress = ((Number) progressJson.get(key)).doubleValue();
+                        progressMap.put(courseId, progress);
+                    }
+
+                    user.setProgress(progressMap);
+                    System.out.println("User progress loaded successfully.");
+                    return;
+                }
+            }
+
+        } catch (IOException | ParseException e) {
+            System.err.println("Error loading user progress: " + e.getMessage());
+        }
     }
 
     public ArrayList<Assessment> loadAssessmentHistory(User user) {

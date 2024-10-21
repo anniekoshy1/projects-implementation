@@ -18,6 +18,7 @@ public class DataWriter {
 
     }
 
+    //done
     public boolean saveUsers(ArrayList<User> users) {
         if (users.size() > maxUsers) {
             System.err.println("Cannot save users: maximum user limit reached.");
@@ -33,6 +34,7 @@ public class DataWriter {
         return writeToFile(USERS_FILE, usersJSON);
     }
 
+    //done
     public boolean saveCourses(ArrayList<Course> courses) {
         if (courses.size() > maxCourses) {
             System.err.println("Cannot save courses: maximum course limit reached.");
@@ -48,6 +50,7 @@ public class DataWriter {
         return writeToFile(COURSES_FILE, coursesJSON);
     }
 
+    //done
     public boolean saveLanguages(ArrayList<Language> languages) {
         JSONArray languagesJSON = new JSONArray();
 
@@ -73,13 +76,14 @@ public class DataWriter {
         System.out.println("Database connected.");
         return isDataBaseConnected;
     }
-
+    //done
     public boolean disconnectFromDatabase() {
         isDataBaseConnected = false;
         System.out.println("Database disconnected.");
         return !isDataBaseConnected;
     }
 
+    //done
     private JSONObject serializeUser(User user) {
         JSONObject userJSON = new JSONObject();
         userJSON.put("id", user.getId().toString());
@@ -102,6 +106,7 @@ public class DataWriter {
         return userJSON;
     }
 
+    //done
     private JSONObject serializeCourse(Course course) {
         JSONObject courseJSON = new JSONObject();
         courseJSON.put("name", course.getName());
@@ -112,6 +117,7 @@ public class DataWriter {
         return courseJSON;
     }
 
+    //done
     private JSONObject serializeLanguage(Language language) {
         JSONObject languageJSON = new JSONObject();
         languageJSON.put("name", language.getName());
@@ -120,7 +126,8 @@ public class DataWriter {
 
         return languageJSON;
     }
-
+    
+    //done
     private boolean writeToFile(String filePath, JSONArray jsonArray) {
         try (FileWriter file = new FileWriter(filePath)) {
             file.write(jsonArray.toJSONString());
