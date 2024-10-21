@@ -13,9 +13,10 @@ public class Questions {
         this.content = content;
         this.correctAnswer = correctAnswer;
         this.difficulty = difficulty;
+        this.questionText = questionText;
         this.id = UUID.randomUUID(); 
     }
-
+    
     public String getContent() {
         return content;
     }

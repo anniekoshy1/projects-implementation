@@ -16,10 +16,7 @@ public class User {
     private UUID currentLanguageID;
     private String currentLanguageName;
 
-    // Constructor (adjusted for DataLoader)
-    public User(UUID id, String username, String email, String password, ArrayList<Course> courses, 
-                Map<UUID, Double> progress, ArrayList<UUID> completedCourses, UUID currentCourseID, 
-                ArrayList<Language> languages, UUID currentLanguageID, String currentLanguageName) {
+    public User(UUID id, String username, String email, String password, ArrayList<Course> courses, Map<UUID, Double> progress, ArrayList<UUID> completedCourses, UUID currentCourseID, ArrayList<Language> languages, UUID currentLanguageID, String currentLanguageName) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -32,6 +29,20 @@ public class User {
         this.currentLanguageID = currentLanguageID;
         this.currentLanguageName = currentLanguageName;
     }
+    public User(UUID id, String username, String email, String password, ArrayList<Course> courses, Map<UUID, Double> progress, ArrayList<UUID> completedCourses, UUID currentCourseID, ArrayList<Language> languages, UUID currentLanguageID, String currentLanguageName) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.courses = courses;
+        this.progress = progress;
+        this.completedCourses = completedCourses;
+        this.currentCourseID = currentCourseID;
+        this.languages = languages;
+        this.currentLanguageID = currentLanguageID;
+        this.currentLanguageName = currentLanguageName;
+    }
+    
 
     // Check if email is valid
     public static boolean validEmail(String email) {
@@ -49,7 +60,6 @@ public class User {
     }
 
     public Course getCurrentCourse() {
-        // In this case, you'd need to fetch the course using the UUID
         return this.courses.stream()
                 .filter(course -> course.getId().equals(this.currentCourseID))
                 .findFirst()
@@ -95,7 +105,7 @@ public class User {
     }
 
     public void setCourseAccess() {
-        if (this.currentCourseID != null && !this.courses.contains(currentCourseID)) {
+        if (this.currentCourseID != null && this.courses.stream().noneMatch(course -> course.getId().equals(this.currentCourseID))) {
             this.courses.add(getCurrentCourse());
         }
     }
@@ -131,7 +141,6 @@ public class User {
 
     public void setCurrentLanguage(Language language) {
         this.currentLanguageID = language.getId();
-        this.currentLanguageName = language.getName();
     }
 
     public UUID getId() {

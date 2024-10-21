@@ -26,6 +26,12 @@ public class Assessment {
         this.id = UUID.randomUUID(); 
     }
 
+    public Assessment(UUID id, String type, String userScore, int attempts){
+        this.id = id;
+        this.type = AssessmentType.valueOf(type.toUpperCase());
+        this.userScore = Integer.parseInt(userScore);
+        this.attempts = attempts;
+    }
     public void startAssessment() {
         System.out.println("Assessment of type " + type + " started.");
     }

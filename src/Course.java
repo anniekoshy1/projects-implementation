@@ -23,6 +23,16 @@ public class Course {
         this.id = UUID.randomUUID();
     }
 
+    public Course(UUID id, String name, String description, boolean userAccess, double progress, boolean completed, ArrayList<Lesson> lessons, ArrayList<Assessment> assessments){
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.userAccess = userAccess;
+        this.courseProgress = progress;
+        this.completed = lessons;
+        this.assessments = assessments;
+    }
+
     public Course(UUID id, double courseProgress){
         this.id = id;
         this.courseProgress = courseProgress;
@@ -58,6 +68,16 @@ public class Course {
 
     public boolean getUserAccess() {
         return userAccess;
+    }
+
+    private boolean completed;
+
+    public boolean isCompleted(){
+        return completed;
+    }
+
+    public void setCompleted(boolean completed){
+        this.completed = completed;
     }
 
     public void setUserAccess(boolean access) {

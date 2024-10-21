@@ -2,16 +2,13 @@ import java.util.ArrayList;
 
 public class LanguageList {
 
-    // Attributes
     private static LanguageList instance;
     private ArrayList<Language> languages;
 
-    // Constructor
     private LanguageList() {
         languages = new ArrayList<>();
     }
 
-    // Method to get the singleton instance
     public static LanguageList getInstance() {
         if (instance == null) {
             instance = new LanguageList();
@@ -19,28 +16,38 @@ public class LanguageList {
         return instance;
     }
 
-    // Methods
     public Language addLanguage(Language language) {
-        // No code for now
+        if (language != null && !languages.contains(language)) {
+            languages.add(language);
+            save(); 
+            return language;
+        }
         return null;
     }
 
     public ArrayList<Language> getLanguages() {
-        // No code for now
-        return new ArrayList<>();
+        return new ArrayList<>(languages);
     }
 
     public Language getLanguageByName(String name) {
-        // No code for now
-        return null;
+        for (Language language : languages) {
+            if (language.getName().equalsIgnoreCase(name)) {
+                return language;
+            }
+        }
+        return null; 
     }
 
     public boolean removeLanguage(Language language) {
-        // No code for now
-        return false;
+        boolean removed = languages.remove(language);
+        if (removed) {
+            save(); 
+        }
+        return removed;
     }
 
     public void save() {
-        // No code for now
+        DataWriter dataWriter = new DataWriter();
+        dataWriter.saveLanguages(languages);
     }
 }

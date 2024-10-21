@@ -27,6 +27,11 @@ public class Lesson {
         this.foods = new ArrayList<>();
         this.id = generateUUID();
     }
+
+    public Lesson(UUID id, String description){
+        this.id = id;
+        this.description = description;
+    }
     // Getter for topic
     public Dictionary getTopic() {
         return topic;

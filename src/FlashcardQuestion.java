@@ -7,7 +7,7 @@ public class FlashcardQuestion extends Questions {
 
     // Constructor
     public FlashcardQuestion(String frontInfo, String backAnswer) {
-        super(frontInfo, backAnswer, 0);  // Assuming difficulty is set to 0 for now
+        super(frontInfo, backAnswer, Difficulty.Rudimentary);  // Assuming difficulty is set to 0 for now
         this.frontInfo = frontInfo;
         this.backAnswer = backAnswer;
     }

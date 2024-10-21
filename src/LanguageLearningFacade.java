@@ -41,6 +41,11 @@ public class LanguageLearningFacade {
         return userList.getUser(username, password);
     }
 
+        // Get the current user
+    public User getCurrentUser() {
+        return user; // Return the currently logged-in user
+    }
+
     // Set the current user
     public void setUser(String username, String password) {
         this.user = userList.getUser(username, password);
@@ -123,7 +128,6 @@ public class LanguageLearningFacade {
             System.out.println("User or current course is null.");
         }
     }
-
     
     public double getCourseProgress(Language language) {
         if (user != null && user.getCurrentCourse() != null) {
@@ -131,7 +135,6 @@ public class LanguageLearningFacade {
         }
         return 0.0;
     }
-
     
     public void logout() {
         user = null;
