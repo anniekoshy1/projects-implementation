@@ -8,20 +8,29 @@ public class LanguageLearningFacade {
     private User user;
     private Language language;
 
-    // Constructor
     public LanguageLearningFacade() {
         userList = UserList.getInstance();
         courseList = CourseList.getInstance();
         languageList = LanguageList.getInstance();
     }
 
-    // Methods
     public User login(String username, String password) {
-        return userList.getUser(username, password);
+        User user = userList.getUser(username, password);
+        if (user != null) {
+            this.user = user;
+        }
+        return user;
     }
 
-    public User register(String username, String password) {
-        return userList.addUser(username, password);
+    public User register(String username, String email, String password) {
+        if (User.validEmail(email)) {
+            User newUser = userList.addUser(username, email, password);
+            if (newUser != null) {
+                this.user = newUser;
+                return newUser;
+            }
+        }
+        return null;
     }
 
     public User getUser(String username, String password) {
@@ -33,12 +42,23 @@ public class LanguageLearningFacade {
     }
 
     public ArrayList<Language> getAllLanguagesByKeyWord(String keyWord) {
-        // Implement search logic for languages by keyword
-        return new ArrayList<>();
+        ArrayList<Language> matchingLanguages = new ArrayList<>();
+    
+    ArrayList<Language> allLanguages = languageList.getLanguages();
+    
+    for (Language lang : allLanguages) {
+        for (String word : lang.getKeyWords()) {
+            if (word.equalsIgnoreCase(keyWord)) {
+                matchingLanguages.add(lang);
+                break;  
+            }
+        }
     }
+    return matchingLanguages;
+}
 
     public boolean confirmRegistration() {
-        // Implement registration confirmation logic
+        }
         return true;
     }
 
@@ -52,11 +72,13 @@ public class LanguageLearningFacade {
     }
 
     public void startCourse() {
-        // Logic to start a course
+        user.setCurrentCourse(course);
+        course.setUserAccess(true);
     }
+}
 
     public void startAssessment() {
-        // Logic to start an assessment
+        user.completedAssessment(assessment);
     }
 
     public void endAssessment() {
@@ -68,16 +90,15 @@ public class LanguageLearningFacade {
     }
 
     public void startLesson(Lesson lesson) {
-        // Logic to start a lesson
+        user.getCurrentCourse().addLesson(lesson);
     }
 
     public double getCourseProgress(Language language) {
-        // Implement logic to get course progress for the language
-        return 0.0;
+        return user.getProgress(user.getCurrentCourse());
     }
 
     public void logout() {
-        // Implement logout logic
         user = null;
+        language = null;
     }
 }
