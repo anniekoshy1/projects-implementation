@@ -1,10 +1,8 @@
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class Assessment {
 
-    // Enumeration for the type of assessment (e.g., Multiple Choice, True/False, etc.)
     public enum AssessmentType {
         MULTIPLE_CHOICE, TRUE_FALSE, OPEN_ENDED, MATCHING
     }
@@ -13,9 +11,8 @@ public class Assessment {
     private int userScore;  // User's score on the assessment
     private List<Questions> questions;  // List of questions in the assessment
     private int attempts;  // Number of attempts user has made
-    private UUID id;  // Unique ID for the assessment
+    private UUID id;
 
-    // Constructor for creating a new Assessment
     public Assessment(UUID id, AssessmentType type, List<Questions> questions) {
         this.id = id;
         this.type = type;
@@ -24,7 +21,6 @@ public class Assessment {
         this.questions = questions;
     }
 
-    // Getter for the assessment results (user score)
     public int getResults() {
         return userScore;
     }
@@ -56,23 +52,19 @@ public class Assessment {
         }
     }
 
-    // Method to allow user to retake the assessment
     public void retakeAssessment() {
-        attempts++;  // Increment the number of attempts
+        attempts++; 
         this.userScore = 0;  // Reset the score for the retake
     }
 
-    // Generate a new UUID for the assessment
     public UUID generateUUID() {
         return UUID.randomUUID();
     }
 
-    // Getter for the assessment ID
     public UUID getId() {
         return id;
     }
 
-    // Setter for the assessment ID
     public void setUUID(UUID id) {
         this.id = id;
     }

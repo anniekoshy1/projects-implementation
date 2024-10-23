@@ -2,9 +2,10 @@ import java.util.ArrayList;
 
 public class CourseList {
 
-    private static CourseList instance;
-    private ArrayList<Course> courses;
+    private static CourseList instance;  
+    private ArrayList<Course> courses; 
 
+    
     private CourseList() {
         courses = new ArrayList<>();
     }
@@ -18,26 +19,16 @@ public class CourseList {
 
     public Course addCourse(Course course) {
         courses.add(course);
-        save(); 
         return course;
     }
 
+    
     public boolean removeCourse(Course course) {
-        boolean removed = courses.remove(course);
-        if (removed) {
-            save(); 
-        }
-        return removed;
+        return courses.remove(course);
     }
 
-    public ArrayList<Course> getCourse(String courseName) {
-        ArrayList<Course> foundCourses = new ArrayList<>();
-        for (Course course : courses) {
-            if (course.getName().equalsIgnoreCase(courseName)) {
-                foundCourses.add(course);
-            }
-        }
-        return foundCourses;
+    public ArrayList<Course> getCourses() {
+        return courses;
     }
 
     public Course findByName(String name) {
@@ -46,16 +37,18 @@ public class CourseList {
                 return course;
             }
         }
-        return null;
+        return null;  // Return null if the course is not found
+    }
+
+    public Course getCourseById(String courseId) {
+        for (Course course : courses) {
+            if (course.getId().toString().equals(courseId)) {
+                return course;
+            }
+        }
+        return null;  // Return null if the course is not found
     }
 
     public void save() {
-        DataWriter dataWriter = new DataWriter();
-        dataWriter.saveCourses(courses);
-    }
-
-    public void load() {
-        DataLoader dataLoader = new DataLoader();
-        courses = dataLoader.getCourses();
     }
 }

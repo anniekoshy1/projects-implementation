@@ -1,145 +1,141 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class LanguageLearningFacade {
 
-    private UserList userList;
-    private CourseList courseList;
-    private LanguageList languageList;
-    private User user;
-    private Language language;
+    private UserList userList;  // List of all users
+    private CourseList courseList;  // List of all available courses
+    private LanguageList languageList;  // List of all languages in the system
+    private User user;  // The currently logged-in user
+    private Language currentLanguage;  // The language the user is currently learning
+    DataLoader dataLoader = new DataLoader();
 
-    // Constructor
     public LanguageLearningFacade() {
         userList = UserList.getInstance();
         courseList = CourseList.getInstance();
         languageList = LanguageList.getInstance();
     }
 
-    // Login user by username and password
-    public User login(String username, String password) {
-        User user = userList.getUser(username, password);
+    // User login using username and password
+    public boolean login(String username, String password) {
+        User foundUser = userList.findUserByUsername(username);
+        if (foundUser != null && foundUser.getPassword().equals(password)) {
+            this.user = foundUser;
+
+            dataLoader.loadUserProgress(this.user);    
+
+            return true;
+        }
+        return false;
+    }
+
+    // User logout to reset the current session
+    public void logout() {
+        this.user = null;
+        this.currentLanguage = null;
+    }
+
+    // Start a new course for the user
+    public void startCourse(Course course) {
         if (user != null) {
-            this.user = user;
-            this.langauge = user.getCurrentLanguage;
+            user.getCourses().add(course);
+            course.setUserAccess(true);  // Grant access to the course
         }
-        return user;
     }
 
-    // Register a new user with username, email, and password
-    public User register(String username, String email, String password) {
-        if (User.validEmail(email)) {
-            User newUser = userList.addUser(username, email, password);
-            if (newUser != null) {
-                this.user = newUser;
-                return newUser;
+    // Track the progress of the current course
+    public double trackCourseProgress(Course course) {
+        if (user != null && course.getUserAccess()) {
+            return course.getCourseProgress();
+        }
+        return 0.0;
+    }
+
+    // Start an assessment for the current course
+    public void startAssessment(Assessment assessment) {
+        if (user != null) {
+            assessment.retakeAssessment();  
+        }
+    }
+
+    // Get a list of all languages supported in the system
+    public ArrayList<Language> getAllLanguages() {
+        return languageList.getLanguages();
+    }
+
+    // Select a language for the user to learn
+    public void selectLanguage(String languageName) {
+        Language language = languageList.findLanguageByName(languageName);
+        if (language != null) {
+            this.currentLanguage = language;
+        }
+    }
+
+    // Track the user's progress in the current language
+    public double trackLanguageProgress() {
+        if (currentLanguage != null) {
+            return currentLanguage.getLanguageProgress();
+        }
+        return 0.0;
+    }
+
+    // Get all courses available in the system
+    public ArrayList<Course> getAllCourses() {
+        return courseList.getCourses();
+    }
+
+    // Track overall progress in all courses for a user
+    public double trackOverallProgress() {
+        if (user != null) {
+            double totalProgress = 0.0;
+            for (Course course : user.getCourses()) {
+                totalProgress += course.getCourseProgress();
             }
+            return totalProgress / user.getCourses().size();
         }
-        return null; // Registration failed
+        return 0.0;
     }
 
-    // Get an existing user
-    public User getUser(String username, String password) {
-        return userList.getUser(username, password);
-    }
-
-        // Get the current user
-    public User getCurrentUser() {
-        return user; // Return the currently logged-in user
-    }
-
-    // Set the current user
-    public void setUser(String username, String password) {
-        this.user = userList.getUser(username, password);
-    }
-
-    // Search languages by a keyword
+    // Find all languages that match a specific keyword
     public ArrayList<Language> getAllLanguagesByKeyWord(String keyWord) {
         ArrayList<Language> matchingLanguages = new ArrayList<>();
-        ArrayList<Language> allLanguages = languageList.getLanguages();
-    
-        for (Language lang : allLanguages) {
-            for (String word : lang.getKeyWords()) {
-                if (word.equalsIgnoreCase(keyWord)) {
-                    matchingLanguages.add(lang);
-                    break;  
-                }
+        for (Language language : languageList.getLanguages()) {
+            if (language.getKeyWords().contains(keyWord)) {
+                matchingLanguages.add(language);
             }
         }
         return matchingLanguages;
     }
 
-    // Confirm registration
-    public boolean confirmRegistration(String username, String password, String email) {
-        if (!User.validEmail(email)) {
-            System.out.println("Invalid email.");
-            return false;
-        }
+    // Get the current user who is logged in
+    public User getCurrentUser() {
+        return user;
+    }
 
-        User newUser = userList.addUser(username, email, password);
-        if (newUser != null) {
-            System.out.println("Registration successful.");
-            this.user = newUser;
-            return true;
+    // Save user progress and logout
+    public void saveAndLogout() {
+        if (user != null) {
+            new DataWriter().saveUserProgress(user);
+            logout();
         }
+    }
 
-        System.out.println("Registration failed.");
+    // Add a new user to the system
+    public void registerUser(String username, String email, String password) {
+        UUID userId = UUID.randomUUID();
+        User newUser = new User(userId, username, email, password, new ArrayList<>(), new HashMap<>(), new ArrayList<>(), null, new ArrayList<>(), null, "English");
+        userList.addUser(newUser);
+    }
+
+    public boolean hasCourseAccess(Course course) {
+        if (user != null) {
+            return course.getUserAccess();
+        }
         return false;
     }
 
-    public String setLanguage(Language language) {
-        this.language = language;
-        user.setCurrentLanguage(language);  
-        return "Language set successfully";
-    }
-
-    public ArrayList<Course> getAllCourses() {
-        return courseList.getCourse(null);
-    }
-
-    public void startCourse(Course course) {
-        if (user != null && course != null) {
-            user.setCurrentCourse(course);
-            course.setUserAccess(true); 
-        } else {
-            System.out.println("User or course is null.");
-        }
-    }
-
-    public void startAssessment(Assessment assessment) {
-        if (user != null && assessment != null) {
-            user.completedAssessment(assessment);
-        } else {
-            System.out.println("User or assessment is null.");
-        }
-    }
-
-    public void endAssessment() {
-        System.out.println("Assessment ended.");
-    }
-
-    public void startStarterTest(StarterTest test) {
-    
-        System.out.println("Starter test started.");
-    }
-
-    public void startLesson(Lesson lesson) {
-        if (user != null && user.getCurrentCourse() != null) {
-            user.getCurrentCourse().addLesson(lesson);
-        } else {
-            System.out.println("User or current course is null.");
-        }
-    }
-    
-    public double getCourseProgress(Language language) {
-        if (user != null && user.getCurrentCourse() != null) {
-            return user.getProgress(user.getCurrentCourse());
-        }
-        return 0.0;
-    }
-    
-    public void logout() {
-        user = null;
-        language = null;
-        System.out.println("User logged out.");
+    public void loadAssessmentQuestions(UUID assessmentId) {
+        String assessmentIDSTR = assessmentId.toString();
     }
 }

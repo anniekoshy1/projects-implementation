@@ -1,49 +1,51 @@
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 
-public class MultipleChoiceQuestion extends Questions {
+public class MultipleChoiceQuestion {
 
-    private ArrayList<String> options;
-    private int correctAnswerIndex;
-    private int usersAnswerIndex;
+    private String question;  // The question being asked
+    private List<String> choices;  // List of possible answer choices
+    private String correctAnswer;  // The correct answer
+    private String userAnswer;  // The answer provided by the user
 
-    public MultipleChoiceQuestion(String question, ArrayList<String> options, int correctAnswerIndex, Difficulty difficulty) {
-        super(question, options.get(correctAnswerIndex), difficulty); 
-        this.options = options;
-        this.correctAnswerIndex = correctAnswerIndex;
-        this.usersAnswerIndex = -1; 
+    public MultipleChoiceQuestion(String question, List<String> choices, String correctAnswer) {
+        this.question = question;
+        this.choices = choices;
+        this.correctAnswer = correctAnswer;
+        this.userAnswer = "";
     }
 
-    public String getCorrectAnswer() {
-        return options.get(correctAnswerIndex);
+    // Get the question text
+    public String getQuestion() {
+        return question;
     }
 
-    public void setUsersAnswer(int index) {
-        if (index >= 0 && index < options.size()) {
-            this.usersAnswerIndex = index;
-        } else {
-            System.out.println("Invalid answer index.");
-        }
+    // Get the list of choices for the question
+    public List<String> getChoices() {
+        return choices;
     }
 
+    // Submit the user's answer
+    public void submitAnswer(String userAnswer) {
+        this.userAnswer = userAnswer;
+    }
+
+    // Check if the user's answer is correct
     public boolean checkAnswer() {
-        return this.usersAnswerIndex == this.correctAnswerIndex;
+        return userAnswer.equalsIgnoreCase(correctAnswer);
     }
 
-    public void shuffleQuestions() {
-        Collections.shuffle(options);
+    // Get the correct answer for the question
+    public String getCorrectAnswer() {
+        return correctAnswer;
     }
 
-    public ArrayList<String> getOptions() {
-        return options;
+    // Reset the user's answer for retrying the question
+    public void reset() {
+        this.userAnswer = "";
     }
 
-    @Override
-    public String toString() {
-        StringBuilder questionDisplay = new StringBuilder(getContent() + "\n");
-        for (int i = 0; i < options.size(); i++) {
-            questionDisplay.append(i + 1).append(". ").append(options.get(i)).append("\n");
-        }
-        return questionDisplay.toString();
+    // Get the user's answer
+    public String getUserAnswer() {
+        return userAnswer;
     }
 }

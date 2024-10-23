@@ -1,82 +1,68 @@
-import java.util.UUID;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 public class Questions {
 
-    private String content;
-    private String correctAnswer;
-    private String userAnswer;
-    private Difficulty difficulty;
-    private UUID questionid;
-    private String questionType;
+    private String questionText;  // The text of the question
+    private boolean correctAnswer;  // The correct answer for the question
+    private String userAnswer;  // The answer provided by the user
+    private Difficulty difficulty;  // The difficulty level of the question
 
-    public Questions(UUID questionID, String content, String correctAnswer, String userAnswer, String questionType, int difficulty) {
-        this.questionID = questionID;
-        this.content = content;
+    public Questions(String questionText, boolean correctAnswer, Difficulty difficulty) {
+        this.questionText = questionText;
         this.correctAnswer = correctAnswer;
-        this.userAnswer = userAnswer;
-        this.questionType = questionType;
         this.difficulty = difficulty;
+        this.userAnswer = "";
     }
 
-    public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
-        json.put("questionID", this.questionID.toString());
-        json.put("content", this.content);
-        json.put("correctAnswer", this.correctAnswer);
-        json.put("userAnswer", this.userAnswer != null ? this.userAnswer : "");
-        json.put("questionType", this.questionType);
-        json.put("difficulty", this.difficulty);
-        return json;
+    // Get the text of the question
+    public String getQuestionText() {
+        return questionText;
     }
 
-    // Deserialize from JSON
-    public static Questions fromJSON(JSONObject json) {
-        UUID questionID = UUID.fromString(json.getString("questionID"));
-        String content = json.getString("content");
-        String correctAnswer = json.getString("correctAnswer");
-        String userAnswer = json.getString("userAnswer");
-        String questionType = json.getString("questionType");
-        int difficulty = json.getInt("difficulty");
-
-        return new Questions(questionID, content, correctAnswer, userAnswer, questionType, difficulty);
-    }
-    
-    public String getContent() {
-        return content;
+    // Set the text of the question
+    public void setQuestionText(String questionText) {
+        this.questionText = questionText;
     }
 
+    // Get the correct answer for the question
+    public boolean getCorrectAnswer() {
+        return correctAnswer;
+    }
+
+    // Set the correct answer for the question
+    public void setCorrectAnswer(boolean correctAnswer) {
+        this.correctAnswer = correctAnswer;
+    }
+
+    // Get the user's answer for the question
+    public String getUserAnswer() {
+        return userAnswer;
+    }
+
+    // Submit the user's answer for the question
+    public void submitAnswer(String userAnswer) {
+        this.userAnswer = userAnswer;
+    }
+
+    // Check if the user's answer is correct
+public boolean checkAnswers() {
+    return userAnswer.equalsIgnoreCase(Boolean.toString(correctAnswer));
+}
+
+    // Get the difficulty level of the question
     public Difficulty getDifficulty() {
         return difficulty;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
+    // Set the difficulty level of the question
     public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
     }
 
-    public void setUserAnswer(String userAnswer) {
-        this.userAnswer = userAnswer;
-    }
-
-    public boolean checkAnswer() {
-        return correctAnswer.equals(userAnswer);
-    }
-
-    public UUID generateUUID() {
-        return UUID.randomUUID();
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
+    public void resetAnswer() {
+        this.userAnswer = "";
     }
 
     @Override
     public String toString() {
-        return "Question: " + content + "\nDifficulty: " + difficulty + "\nID: " + id;
+        return "Question: " + questionText + "\nDifficulty: " + difficulty + "\nCorrect Answer: " + correctAnswer;
     }
 }

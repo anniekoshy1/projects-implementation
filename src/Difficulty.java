@@ -1,5 +1,5 @@
 public enum Difficulty {
-    Rudimentary,
-    Intermediate,
-    Advanced
+    RUDIMENTARY,   // beginner level
+    INTERMEDIATE,  // Medium level
+    ADVANCED       // High level
 }

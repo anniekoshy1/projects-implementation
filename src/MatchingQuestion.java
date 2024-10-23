@@ -1,47 +1,58 @@
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class MatchingQuestion extends Questions {
+public class MatchingQuestion {
 
-    private ArrayList<String> leftItems;
-    private ArrayList<String> rightItems;
-    private HashMap<String, String> correctMatches;
-    private HashMap<String, String> userMatches;
+    private Map<String, String> questionPairs;
+    private Map<String, String> userMatches;
 
-    public MatchingQuestion(ArrayList<String> leftItems, ArrayList<String> rightItems, HashMap<String, String> correctMatches, Difficulty difficulty) {
-        super("", "", difficulty);  
-        this.leftItems = leftItems;
-        this.rightItems = rightItems;
-        this.correctMatches = correctMatches;
+    public MatchingQuestion(Map<String, String> questionPairs) {
+        this.questionPairs = questionPairs;
         this.userMatches = new HashMap<>();
     }
 
-    public void addPair(String key, String value) {
-        userMatches.put(key, value);
+    public void setUserMatch(String term, String match) {
+        userMatches.put(term, match);
     }
 
-    public HashMap<String, String> getPairs() {
-        return userMatches;
-    }
-
-    public void submitMatch(String leftItem, String rightItem) {
-        addPair(leftItem, rightItem);
-    }
-
-    public void removePair(String key) {
-        userMatches.remove(key);
-    }
-
-    @Override
+    // Check if the user's matches are correct
     public boolean checkAnswer() {
-        return userMatches.equals(correctMatches);
+        for (String term : questionPairs.keySet()) {
+            String correctMatch = questionPairs.get(term);
+            String userMatch = userMatches.get(term);
+            if (userMatch == null || !userMatch.equals(correctMatch)) {
+                return false;  // Return false if any match is incorrect
+            }
+        }
+        return true;  // Return true if all matches are correct
     }
 
-    public ArrayList<String> getLeftItems() {
-        return leftItems;
+    public void reset() {
+        userMatches.clear();
     }
 
-    public ArrayList<String> getRightItems() {
-        return rightItems;
+    // Get the correct match for a term
+    public String getCorrectMatch(String term) {
+        return questionPairs.get(term);
+    }
+
+    // Get the list of all terms in the question
+    public List<String> getTerms() {
+        return List.copyOf(questionPairs.keySet());
+    }
+
+    // Get the list of all possible matches in the question
+    public List<String> getMatches() {
+        return List.copyOf(questionPairs.values());
+    }
+
+    public String getUserMatch(String term) {
+        return userMatches.get(term);
+    }
+
+    // Display the correct answers for all terms
+    public Map<String, String> showCorrectAnswers() {
+        return questionPairs;
     }
 }

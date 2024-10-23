@@ -1,147 +1,152 @@
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class DataWriter {
 
-    private boolean isDataBaseConnected;
-    private int maxUsers = 100000;
-    private int maxCourses = 500;
+    private static final String USERS_FILE = "docs/JSON/User.json";
+    private static final String COURSES_FILE = "docs/JSON/Courses.json";
+    private static final String LANGUAGES_FILE = "docs/JSON/Languages.json";
 
-    private static final String USERS_FILE = "users.json";
-    private static final String COURSES_FILE = "courses.json";
-    private static final String LANGUAGES_FILE = "languages.json";
-
-    public DataWriter() {
-
-    }
-
-    //done
-    @SuppressWarnings("unchecked")
     public boolean saveUsers(ArrayList<User> users) {
-        if (users.size() > maxUsers) {
-            System.err.println("Cannot save users: maximum user limit reached.");
-            return false;
-        }
-
-        JSONArray usersJSON = new JSONArray();
+        JSONArray userArray = new JSONArray();
 
         for (User user : users) {
-            usersJSON.add(serializeUser(user));
+            JSONObject userJson = new JSONObject();
+            userJson.put("id", user.getId().toString());
+            userJson.put("username", user.getUsername());
+            userJson.put("email", user.getEmail());
+            userJson.put("password", user.getPassword());
+
+            JSONArray coursesJson = new JSONArray();
+            for (Course course : user.getCourses()) {
+                JSONObject courseJson = new JSONObject();
+                courseJson.put("courseID", course.getId().toString());
+                courseJson.put("courseProgress", course.getCourseProgress());
+                coursesJson.add(courseJson);
+            }
+            userJson.put("courses", coursesJson);
+
+            JSONObject progressJson = new JSONObject();
+            for (UUID courseId : user.getProgress().keySet()) {
+                progressJson.put(courseId.toString(), user.getProgress().get(courseId));
+            }
+            userJson.put("progress", progressJson);
+
+            JSONArray completedCoursesJson = new JSONArray();
+            for (UUID completedCourseId : user.getCompletedCourses()) {
+                completedCoursesJson.add(completedCourseId.toString());
+            }
+            userJson.put("completedCourses", completedCoursesJson);
+
+            JSONObject currentCourseJson = new JSONObject();
+            currentCourseJson.put("courseID", user.getCurrentCourse().toString());
+            userJson.put("currentCourse", currentCourseJson);
+
+            JSONArray languagesJson = new JSONArray();
+            for (Language language : user.getLanguages()) {
+                JSONObject languageJson = new JSONObject();
+                languageJson.put("languageID", language.getId().toString());
+                languageJson.put("name", language.getName());
+                languagesJson.add(languageJson);
+            }
+            userJson.put("languages", languagesJson);
+
+            JSONObject currentLanguageJson = new JSONObject();
+            currentLanguageJson.put("languageID", user.getCurrentLanguage().toString());
+            currentLanguageJson.put("name", user.getCurrentLanguageName());
+            userJson.put("currentLanguage", currentLanguageJson);
+
+            userArray.add(userJson);
         }
 
-        return writeToFile(USERS_FILE, usersJSON);
+        return writeToFile(USERS_FILE, userArray);
     }
 
-    //done
-    @SuppressWarnings("unchecked")
     public boolean saveCourses(ArrayList<Course> courses) {
-        if (courses.size() > maxCourses) {
-            System.err.println("Cannot save courses: maximum course limit reached.");
-            return false;
-        }
-
-        JSONArray coursesJSON = new JSONArray();
+        JSONArray courseArray = new JSONArray();
 
         for (Course course : courses) {
-            coursesJSON.add(serializeCourse(course));
+            JSONObject courseJson = new JSONObject();
+            courseJson.put("courseID", course.getId().toString());
+            courseJson.put("name", course.getName());
+            courseJson.put("description", course.getDescription());
+            courseJson.put("userAccess", course.getUserAccess());
+            courseJson.put("courseProgress", course.getCourseProgress());
+            courseJson.put("completed", course.isCompleted());
+
+            JSONArray lessonsJson = new JSONArray();
+            for (Lesson lesson : course.getAllLessons()) {
+                JSONObject lessonJson = new JSONObject();
+                lessonJson.put("lessonID", lesson.getId().toString());
+                lessonJson.put("lessonProgress", lesson.getLessonProgress());
+                lessonJson.put("description", lesson.getDescription());
+                lessonsJson.add(lessonJson);
+            }
+            courseJson.put("lessons", lessonsJson);
+
+            JSONArray assessmentsJson = new JSONArray();
+            for (Assessment assessment : course.getAllAssessments()) {
+                JSONObject assessmentJson = new JSONObject();
+                assessmentJson.put("assessmentID", assessment.getId().toString());
+                assessmentJson.put("type", assessment.getType().toString());
+                assessmentJson.put("attempts", assessment.getAttempts());
+                assessmentsJson.add(assessmentJson);
+            }
+            courseJson.put("assessments", assessmentsJson);
+
+            courseArray.add(courseJson);
         }
 
-        return writeToFile(COURSES_FILE, coursesJSON);
+        return writeToFile(COURSES_FILE, courseArray);
     }
 
-    //done
-    @SuppressWarnings("unchecked")
     public boolean saveLanguages(ArrayList<Language> languages) {
-        JSONArray languagesJSON = new JSONArray();
+        JSONArray languageArray = new JSONArray();
 
         for (Language language : languages) {
-            languagesJSON.add(serializeLanguage(language));
+            JSONObject languageJson = new JSONObject();
+            languageJson.put("languageID", language.getId().toString());
+            languageJson.put("name", language.getName());
+            languageArray.add(languageJson);
         }
 
-        return writeToFile(LANGUAGES_FILE, languagesJSON);
+        return writeToFile(LANGUAGES_FILE, languageArray);
     }
 
-    public void saveProgress(User user) {
-    }
-
-    public void saveAssessmentResults(User user, Assessment assessment) {
-
-    }
-
-    public void setCourseAccess() {
-    }
-
-    public boolean connectToDatabase() {
-        isDataBaseConnected = true;
-        System.out.println("Database connected.");
-        return isDataBaseConnected;
-    }
-    //done
-    public boolean disconnectFromDatabase() {
-        isDataBaseConnected = false;
-        System.out.println("Database disconnected.");
-        return !isDataBaseConnected;
-    }
-
-    //done
-    @SuppressWarnings("unchecked")
-    private JSONObject serializeUser(User user) {
-        JSONObject userJSON = new JSONObject();
-        userJSON.put("id", user.getId().toString());
-        userJSON.put("username", user.getUsername());
-        userJSON.put("email", user.getEmail());
-        userJSON.put("password", user.getPassword());
-
-        JSONArray coursesJSON = new JSONArray();
-        for (Course course : user.getCourses()) {
-            coursesJSON.add(serializeCourse(course));
+    public void saveUserProgress(User user) {
+        ArrayList<User> users = new DataLoader().getUsers();
+        for (User existingUser : users) {
+            if (existingUser.getId().equals(user.getId())) {
+                existingUser.setProgress(user.getProgress());
+                break;
+            }
         }
-        userJSON.put("courses", coursesJSON);
+        saveUsers(users);
+    }
 
-        JSONArray completedCoursesJSON = new JSONArray();
-        for (Course completedCourse : user.getCompletedCourses()) {
-            completedCoursesJSON.add(serializeCourse(completedCourse));
+    public void saveAssessmentHistory(User user, Assessment assessment) {
+        ArrayList<User> users = new DataLoader().getUsers();
+        for (User existingUser : users) {
+            if (existingUser.getId().equals(user.getId())) {
+                break;
+            }
         }
-        userJSON.put("completedCourses", completedCoursesJSON);
-
-        return userJSON;
+        saveUsers(users);
     }
 
-    //done
-    @SuppressWarnings("unchecked")
-    private JSONObject serializeCourse(Course course) {
-        JSONObject courseJSON = new JSONObject();
-        courseJSON.put("name", course.getName());
-        courseJSON.put("description", course.getDescription());
-        courseJSON.put("userAccess", course.isUserAccess());
-        courseJSON.put("courseProgress", course.getCourseProgress());
-
-        return courseJSON;
-    }
-
-    //done
-    @SuppressWarnings("unchecked")
-    private JSONObject serializeLanguage(Language language) {
-        JSONObject languageJSON = new JSONObject();
-        languageJSON.put("name", language.getName());
-        languageJSON.put("coursePercentage", language.getCoursePercentage());
-        languageJSON.put("totalPercentage", language.getTotalPercentage());
-
-        return languageJSON;
-    }
-    
-    //done
     private boolean writeToFile(String filePath, JSONArray jsonArray) {
         try (FileWriter file = new FileWriter(filePath)) {
             file.write(jsonArray.toJSONString());
             file.flush();
-            System.out.println("Data saved successfully to " + filePath);
             return true;
         } catch (IOException e) {
-            System.err.println("Error writing data to " + filePath + ": " + e.getMessage());
+            System.err.println("Error writing to file: " + e.getMessage());
             return false;
         }
     }

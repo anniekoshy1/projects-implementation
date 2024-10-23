@@ -1,21 +1,24 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 public class User {
-    private UUID id;
-    private String username;
-    private String email;
-    private String password;
-    private ArrayList<Course> courses;
-    private Map<UUID, Double> progress;
-    private ArrayList<UUID> completedCourses;
-    private UUID currentCourseID;
-    private ArrayList<Language> languages;
-    private UUID currentLanguageID;
 
-    public User(UUID id, String username, String email, String password, ArrayList<Course> courses, Map<UUID, Double> progress, ArrayList<UUID> completedCourses, UUID currentCourseID, ArrayList<Language> languages, UUID currentLanguageID, String currentLanguageName) {
+    private UUID id;
+    private String username;  // Username of the user
+    private String email;  // Email address of the user
+    private String password;  // User's password
+    private ArrayList<Course> courses;  // List of courses the user is enrolled in
+    private HashMap<UUID, Double> progress;  // Map to track the user's progress for each course
+    private ArrayList<UUID> completedCourses;  // List of completed courses
+    private UUID currentCourseID;  // The current course the user is working on
+    private ArrayList<Language> languages;  // List of languages the user is learning
+    private UUID currentLanguageID;  // The ID of the current language the user is learning
+    private String currentLanguageName;  // The name of the current language the user is learning
+
+    public User(UUID id, String username, String email, String password, ArrayList<Course> courses,
+                HashMap<UUID, Double> progress, ArrayList<UUID> completedCourses, UUID currentCourseID,
+                ArrayList<Language> languages, UUID currentLanguageID, String currentLanguageName) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -26,121 +29,125 @@ public class User {
         this.currentCourseID = currentCourseID;
         this.languages = languages;
         this.currentLanguageID = currentLanguageID;
-    }
-    
-
-    // Check if email is valid
-    public static boolean validEmail(String email) {
-        return email.contains("@") && email.contains(".");
-    }
-
-    // Getter for progress
-    public Map<UUID, Double> getProgress() {
-        return new HashMap<>(this.progress);
-    }
-
-    // Setter for progress
-    public void setProgress(Map<UUID, Double> progress) {
-        this.progress = progress;
-    }
-
-    public Course getCurrentCourse() {
-        return this.courses.stream()
-                .filter(course -> course.getId().equals(this.currentCourseID))
-                .findFirst()
-                .orElse(null);
-    }
-
-    public Language getCurrentLanguage() {
-        // Fetch the current language based on ID
-        return this.languages.stream()
-                .filter(language -> language.getId().equals(this.currentLanguageID))
-                .findFirst()
-                .orElse(null);
-    }
-
-    // Register method
-    public boolean register(UUID id, String username, String email, String password) {
-        if (username == null || email == null || password == null || !validEmail(email)) {
-            return false;
-        }
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        return true;
-    }
-
-    // Login method
-    public boolean login(UUID id, String username, String password) {
-        return this.id.equals(id) && this.username.equals(username) && this.password.equals(password);
-    }
-
-    public ArrayList<Course> getCourses() {
-        return this.courses;
-    }
-
-    public String setCourse(Course course) {
-        this.currentCourseID = course.getId();
-        return "Course set successfully.";
-    }
-
-    public ArrayList<UUID> getCompletedCourses() {
-        return this.completedCourses;
-    }
-
-    public void setCourseAccess() {
-        if (this.currentCourseID != null && this.courses.stream().noneMatch(course -> course.getId().equals(this.currentCourseID))) {
-            this.courses.add(getCurrentCourse());
-        }
-    }
-
-    public ArrayList<Language> getLanguages() {
-        return this.languages;
-    }
-
-    public double getProgress(Course course) {
-        return this.progress.getOrDefault(course.getId(), 0.0);
-    }
-
-    public void updateProgress(double totalPercentage) {
-        if (currentCourseID != null) {
-            this.progress.put(currentCourseID, totalPercentage);
-        }
-    }
-
-    public void completedAssessment(Assessment assessment) {
-        if (currentCourseID != null && this.progress.containsKey(currentCourseID)) {
-            double currentProgress = this.progress.get(currentCourseID);
-            if (currentProgress == 100.0) {
-                this.completedCourses.add(currentCourseID);
-                this.courses.remove(getCurrentCourse());
-                System.out.println("Course completed: " + getCurrentCourse().getName());
-            }
-        }
-    }
-
-    public void setCurrentCourse(Course course) {
-        this.currentCourseID = course.getId();
-    }
-
-    public void setCurrentLanguage(Language language) {
-        this.currentLanguageID = language.getId();
+        this.currentLanguageName = currentLanguageName;
     }
 
     public UUID getId() {
         return id;
     }
 
+    // Get the user's username
     public String getUsername() {
         return username;
     }
 
+    // Set the user's username
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    // Get the user's email
     public String getEmail() {
         return email;
     }
 
+    // Set the user's email
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    // Get the user's password
     public String getPassword() {
         return password;
+    }
+
+    // Set the user's password
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    // Get the list of courses the user is enrolled in
+    public ArrayList<Course> getCourses() {
+        return courses;
+    }
+
+    // Add a course to the user's list of courses
+    public void addCourse(Course course) {
+        courses.add(course);
+    }
+
+    // Get the user's progress in a specific course
+    public double getCourseProgress(UUID courseId) {
+        return progress.getOrDefault(courseId, 0.0);
+    }
+
+    // Update the user's progress for a specific course
+    public void updateCourseProgress(UUID courseId, double newProgress) {
+        progress.put(courseId, newProgress);
+    }
+
+    public ArrayList<UUID> getCompletedCourses() {
+        return completedCourses;
+    }
+
+    public void completeCourse(UUID courseId) {
+        if (!completedCourses.contains(courseId)) {
+            completedCourses.add(courseId);
+        }
+    }
+
+    // Get the current course the user is working on
+    public UUID getCurrentCourse() {
+        return currentCourseID;
+    }
+
+    // Set the current course the user is working on
+    public void setCurrentCourse(UUID courseId) {
+        this.currentCourseID = courseId;
+    }
+
+    // Get the list of languages the user is learning
+    public ArrayList<Language> getLanguages() {
+        return languages;
+    }
+
+    // Add a new language to the user's list of languages
+    public void addLanguage(Language language) {
+        languages.add(language);
+    }
+
+    // Get the current language ID the user is learning
+    public UUID getCurrentLanguage() {
+        return currentLanguageID;
+    }
+
+    // Set the current language ID the user is learning
+    public void setCurrentLanguage(UUID languageId) {
+        this.currentLanguageID = languageId;
+    }
+
+    // Get the current language name the user is learning
+    public String getCurrentLanguageName() {
+        return currentLanguageName;
+    }
+
+    // Set the current language name the user is learning
+    public void setCurrentLanguageName(String languageName) {
+        this.currentLanguageName = languageName;
+    }
+
+    // Get the user's progress in all courses
+    public HashMap<UUID, Double> getProgress() {
+        return progress;
+    }
+
+    // Set the user's progress
+    public void setProgress(HashMap<UUID, Double> progress) {
+        this.progress = progress;
+    }
+
+    @Override
+    public String toString() {
+        return "User: " + username + "\nEmail: " + email + "\nCurrent Language: " + currentLanguageName;
     }
 }

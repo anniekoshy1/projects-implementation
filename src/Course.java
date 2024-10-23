@@ -3,17 +3,17 @@ import java.util.UUID;
 
 public class Course {
 
-    private String name;
-    private String description;
-    private boolean userAccess;
-    private double courseProgress;
-    private ArrayList<Lesson> lessons;
-    private ArrayList<Assessment> assessments;
-    private ArrayList<String> keyWords;
-    private UUID id;
-    private boolean completed;  // This tracks whether the course is completed
+    private String name;  // Name of the course
+    private String description;  // Description of the course
+    private boolean userAccess;  // Access status of the course
+    private double courseProgress;  // Progress of the course (0.0 to 100.0)
+    private ArrayList<Lesson> lessons;  // List of lessons in the course
+    private ArrayList<Assessment> assessments;  // List of assessments in the course
+    private ArrayList<String> keyWords;  // Keywords related to the course
+    private UUID id;  // Unique identifier for the course
+    private boolean completed;  // Indicates whether the course is completed
 
-    // Default constructor
+    // Default constructor for creating a course for a user
     public Course(User user) {
         this.name = "Default Course Name";
         this.description = "Default Description";
@@ -23,92 +23,134 @@ public class Course {
         this.assessments = new ArrayList<>();
         this.keyWords = new ArrayList<>();
         this.id = UUID.randomUUID();
-        this.completed = false;  // Initialize completed as false
+        this.completed = false;
     }
 
-    public Course(UUID id, String name, String description, boolean userAccess, double progress, boolean completed, ArrayList<Lesson> lessons, ArrayList<Assessment> assessments){
+    // Full constructor to set up a course with all details
+    public Course(UUID id, String name, String description, boolean userAccess, double courseProgress, boolean completed, ArrayList<Lesson> lessons, ArrayList<Assessment> assessments) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.userAccess = userAccess;
-        this.courseProgress = progress;
-        this.completed = completed;  // Set the completed status
-        this.lessons = lessons;  // Set the lessons list
+        this.courseProgress = courseProgress;
+        this.completed = completed;
+        this.lessons = lessons;
         this.assessments = assessments;
+        this.keyWords = new ArrayList<>();
     }
-
-    public Course(UUID id, double courseProgress){
+    public Course(UUID id, double courseProgress) {
         this.id = id;
         this.courseProgress = courseProgress;
     }
+    public double getCourseProgress() {
+        return this.courseProgress;
+    }
 
-    // Getters and setters
+    // Get the name of the course
     public String getName() {
         return name;
     }
 
+    // Set the name of the course
     public void setName(String name) {
         this.name = name;
     }
 
-    public boolean isUserAccess(){
-        return this.userAccess;
-    }
-
+    // Get the description of the course
     public String getDescription() {
         return description;
     }
 
+    // Set the description of the course
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public double getCourseProgress() {
-        return courseProgress;
+    // Get the progress of the course
+    public void calculateProgress() {
+        int totalItems = lessons.size() + assessments.size();
+        int completedItems = 0;
+
+        for (Lesson lesson : lessons) {
+            if (lesson.isCompletedLesson()) {
+                completedItems++;
+            }
+        }
+        for (Assessment assessment : assessments) {
+            if (assessment.calculateRating() >= 70) { // 70% = pass
+                completedItems++;
+            }
+        }
+        this.courseProgress = (double) completedItems / totalItems * 100;
     }
 
-    public void setCourseProgress(double progress) {
-        this.courseProgress = progress;
+    public void setCourseProgress(double courseProgress) {
+        if (courseProgress >= 0.0 && courseProgress <= 100.0) {
+            this.courseProgress = courseProgress;
+        }
     }
 
     public boolean getUserAccess() {
         return userAccess;
     }
 
-    public void setUserAccess(boolean access) {
-        this.userAccess = access;
+    public void setUserAccess(boolean userAccess) {
+        this.userAccess = userAccess;
     }
 
-    public boolean isCompleted(){
-        return completed;  // Check if the course is completed
+    // Check if the course is completed
+    public boolean isCompletedCourse() {
+        return completed;
     }
 
-    public void setCompleted(boolean completed){
-        this.completed = completed;  // Set course as completed or not
+    // Set the course as completed
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+        if (completed) {
+            this.courseProgress = 100.0;  // If the course is marked completed, set progress to 100%
+        }
     }
 
+    // Get all the lessons in the course
     public ArrayList<Lesson> getAllLessons() {
         return lessons;
     }
 
+    // Add a lesson to the course
     public void addLesson(Lesson lesson) {
         lessons.add(lesson);
     }
 
+    // Get all the assessments in the course
     public ArrayList<Assessment> getAllAssessments() {
         return assessments;
     }
 
+    // Add an assessment to the course
     public void addAssessment(Assessment assessment) {
         assessments.add(assessment);
     }
 
-    public ArrayList<String> getKeyWords() {
-        return keyWords;
+    // Get the completed assessments in the course
+    public ArrayList<String> getCompletedAssessments() {
+        ArrayList<String> completed = new ArrayList<>();
+        for (Assessment assessment : assessments) {
+            if (assessment.getResults() >= 60) {  
+                completed.add(assessment.toString());  
+            }
+        }
+        return completed;
+    }
+
+    public void setCompletedAssessments(ArrayList<String> completedAssessments) {
     }
 
     public void addKeyWord(String keyWord) {
         keyWords.add(keyWord);
+    }
+
+    public ArrayList<String> getKeyWords() {
+        return keyWords;
     }
 
     public UUID generateUUID() {
@@ -123,14 +165,14 @@ public class Course {
         this.id = id;
     }
 
-    // Method to check if the course is fully completed based on progress
-    public boolean completedCourse() {
-        return courseProgress == 100.0;
+    // Mark the course as completed
+    public void setCompletedCourse() {
+        this.completed = true;
+        this.courseProgress = 100.0;
     }
 
-    // Mark course as completed
-    public void setCompletedCourse() {
-        this.courseProgress = 100.0;
-        this.completed = true;  // Mark the course as completed
+    // Check if the course is fully completed based on progress
+    public boolean completedCourse() {
+        return this.courseProgress == 100.0;
     }
 }

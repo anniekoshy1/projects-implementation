@@ -1,39 +1,53 @@
-public class FlashcardQuestion extends Questions {
+public class FlashcardQuestion {
 
-    // Attributes
-    private String frontInfo;
-    private String backAnswer;
-    private String userAnswer;
+    private String frontInfo;  // The front of the flashcard 
+    private String backAnswer;  // The back of the flashcard
+    private String userAnswer;  // The user's input or guess
 
-    // Constructor
     public FlashcardQuestion(String frontInfo, String backAnswer) {
-        super(frontInfo, backAnswer, Difficulty.Rudimentary);  // Assuming difficulty is set to 0 for now
         this.frontInfo = frontInfo;
         this.backAnswer = backAnswer;
+        this.userAnswer = "";
     }
 
-    // Methods
     public void flipCard() {
-        // No code for now (Could print both sides)
+        System.out.println("Flipped! The answer is: " + backAnswer);
     }
 
-    public void showDefinition() {
-        // No code for now (Logic to show the back side)
+    // Show the definition or answer on the back of the card
+    public String showDefinition() {
+        return backAnswer;
     }
 
+    // Submit an answer for the flashcard question
     public void submitAnswer(String userAnswer) {
         this.userAnswer = userAnswer;
     }
 
+    // Check if the user's answer is correct
     public boolean checkAnswer() {
-        return backAnswer.equals(userAnswer);
+        return userAnswer.equalsIgnoreCase(backAnswer);
     }
 
-    public void showCorrectAnswer() {
-        // No code for now (Could show the correct answer)
+    // Show the correct answer
+    public String showCorrectAnswer() {
+        return backAnswer;
     }
 
     public void reset() {
-        this.userAnswer = null;
+        this.userAnswer = "";
+    }
+
+    // Getters for the flashcard information
+    public String getFrontInfo() {
+        return frontInfo;
+    }
+
+    public String getBackAnswer() {
+        return backAnswer;
+    }
+
+    public String getUserAnswer() {
+        return userAnswer;
     }
 }

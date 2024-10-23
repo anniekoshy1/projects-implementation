@@ -1,56 +1,104 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class Language {
 
-    // Attributes
-    private UUID id;
-    private String name;
-    private double coursePercentage;
-    private double totalPercentage;
-    private ArrayList<Course> completedCourses;
+    private UUID id; 
+    private User user;  // The user who is learning the language
+    private StarterTest starterTest;  // The initial test for placement
+    private String name; 
+    private double coursePercentage;  // Progress percentage for courses
+    private double totalPercentage;  // Overall progress percentage in the language
+    private double languageProgress;  // Progress in learning the language
+    private ArrayList<String> keyWords;  // Keywords related to the language
+    private ArrayList<Course> completedCourses;  // List of completed courses
+    private ArrayList<Assessment> completedAssessments;  // List of completed assessments
+    private HashMap<Course, Boolean> courseAccess;
+    private Dictionary dictionary;  // Dictionary of words for the language
 
-    // Constructor
+    public Language(User user, String name) {
+        this.id = UUID.randomUUID();
+        this.user = user;
+        this.name = name;
+        this.coursePercentage = 0.0;
+        this.totalPercentage = 0.0;
+        this.languageProgress = 0.0;
+        this.keyWords = new ArrayList<>();
+        this.completedCourses = new ArrayList<>();
+        this.completedAssessments = new ArrayList<>();
+        this.courseAccess = new HashMap<>();
+        this.dictionary = new Dictionary(new ArrayList<>());
+    }
     public Language(UUID id, String name) {
         this.id = id;
         this.name = name;
-        this.completedCourses = new ArrayList<>();
     }
-
-    // Getter for ID
-    public UUID getId() {
-        return id;
-    }
-
-    // Getter for name
+    // Get the name of the language
     public String getName() {
         return name;
     }
 
-    // Getter and Setter for course percentage
-    public double getCoursePercentage() {
-        return coursePercentage;
+    // Set access to a specific course
+    public void setCourseAccess(Course course, boolean access) {
+        courseAccess.put(course, access);
     }
 
-    public void setCoursePercentage(double coursePercentage) {
-        this.coursePercentage = coursePercentage;
-    }
-
-    // Getter and Setter for total percentage
+    // Get the total percentage of progress for the language
     public double getTotalPercentage() {
         return totalPercentage;
     }
 
-    public void setTotalPercentage(double totalPercentage) {
-        this.totalPercentage = totalPercentage;
+    // Get the course percentage for the language
+    public double getCoursePercentage() {
+        return coursePercentage;
     }
 
-    // Getter and Setter for completed courses
+    // Get the overall progress in the language
+    public double getLanguageProgress() {
+        return languageProgress;
+    }
+
+    // Set the progress for the language
+    public void setLanguageProgress(double languageProgress) {
+        this.languageProgress = languageProgress;
+        updateTotalPercentage();
+    }
+
+    // Get the completed courses in the language
     public ArrayList<Course> getCompletedCourses() {
         return completedCourses;
     }
 
+    // Set the completed courses for the language
     public void setCompletedCourses(ArrayList<Course> completedCourses) {
         this.completedCourses = completedCourses;
+        updateCoursePercentage();
+    }
+
+    public boolean takenStarterTest() {
+        return starterTest != null;
+    }
+
+    public void addKeyWord(String keyWord) {
+        keyWords.add(keyWord);
+    }
+
+    private void updateTotalPercentage() {
+        this.totalPercentage = (this.coursePercentage + this.languageProgress) / 2.0;
+    }
+
+    private void updateCoursePercentage() {
+        if (completedCourses.size() > 0) {
+            this.coursePercentage = 100.0; 
+        }
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public ArrayList<String> getKeyWords() {
+        return keyWords;
     }
 }

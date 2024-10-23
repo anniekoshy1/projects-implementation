@@ -3,11 +3,11 @@ import java.util.UUID;
 
 public class UserList {
 
-    private static UserList instance;
-    private ArrayList<User> users;
+    private static UserList instance; 
+    private ArrayList<User> users;  // List of users in the system
 
     private UserList() {
-        users = new ArrayList<>();
+        this.users = new ArrayList<>();
     }
 
     public static UserList getInstance() {
@@ -17,79 +17,43 @@ public class UserList {
         return instance;
     }
 
-    private String userExists(String username, String email) {
-        for (User user : users) {
-            if (user.getUsername().equals(username)) {
-                return "Username already exists.";
-            }
-            if (user.getEmail().equals(email)) {
-                return "Email already registered.";
-            }
-        }
-            return null;
-        }
-
-    private boolean validatePassword(String password) {
-        if (password.length() < 8) {
-            System.out.println("Password much be at least 8 characters long.");
-            return false;
-        } 
-        if (!password.matches(".*\\d.*")) {
-            System.out.println("Password much contain at least one number.");
-            return false;
-        }
-        if (!password.matches(".*[!@#$%^&*]")) {
-            System.out.println("Password must contain at least one special character.");
-            return false;
-        }
-        return true;
-        }
-
-    public User addUser(String username, String password, String email) {
-        String existsMessage = userExists(username, email);
-
-        if(existsMessage != null) {
-            System.out.println(existsMessage);
-            return null;
-        }
-
-        if(!User.validEmail(email)) {
-            System.out.println("Invalid email format.");
-            return null;
-        }
-
-        if(!validatePassword(password)){
-            System.out.println("Password does not meet the requirements.");
-            return null;
-        }
-
-        UUID newId = UUID.randomUUID();
-        User newUser = new User(newId, username, email, password);
-        users.add(newUser);
-        return newUser;
+    // Add a user to the list
+    public void addUser(User user) {
+        users.add(user);
     }
 
-    public User getUser(String username, String password) {
+    // Remove a user from the list by their UUID
+    public void removeUser(UUID userId) {
+        users.removeIf(user -> user.getId().equals(userId));
+    }
+
+    // Find a user by their username 
+    public User findUserByUsername(String username) {
         for (User user : users) {
-            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+            if (user.getUsername().equalsIgnoreCase(username)) {
                 return user;
             }
         }
         return null;
     }
 
-    public boolean removeUser(User user) {
-        return users.remove(user);
+    // Find a user by their UUID
+    public User findUserById(UUID userId) {
+        for (User user : users) {
+            if (user.getId().equals(userId)) {
+                return user;
+            }
+        }
+        return null;
     }
 
-    public ArrayList<User> getAllUsers() {
+    // Get the list of all users
+    public ArrayList<User> getUsers() {
         return users;
     }
 
-    public boolean containsUser(User user) {
-        return users.contains(user);
-    }
-
-    public void save() {
+    // Get the total number of users in the system
+    public int getTotalUsers() {
+        return users.size();
     }
 }

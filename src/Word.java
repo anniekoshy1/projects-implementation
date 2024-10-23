@@ -3,61 +3,76 @@ import java.util.UUID;
 
 public class Word {
 
-    private String text;
-    private String language;
-    private String partOfSpeech;
-    private String definition;
-    private ArrayList<Word> synonyms;
-    private ArrayList<Lesson> lessonsIntroduced;
-    private UUID id;
+    private UUID id; 
+    private String wordText;  // The word
+    private String definition;  // The definition or meaning of the word
+    private String partOfSpeech;  // The part of speech of the word 
+    private ArrayList<String> translations;  
+    private String language;  // The language of the word
 
-    public Word(String text, String language, String partOfSpeech, String definition) {
-        this.text = text;
-        this.language = language;
-        this.partOfSpeech = partOfSpeech;
+    public Word(String wordText, String definition, String partOfSpeech, String language) {
+        this.id = UUID.randomUUID();
+        this.wordText = wordText;
         this.definition = definition;
-        this.synonyms = new ArrayList<>();
-        this.lessonsIntroduced = new ArrayList<>();
-        this.id = generateUUID();
+        this.partOfSpeech = partOfSpeech;
+        this.language = language;
+        this.translations = new ArrayList<>();
     }
 
-    public String getText() {
-        return text;
+    public UUID getId() {
+        return id;
     }
 
-    public String getLanguage() {
-        return language;
+    public String getWordText() {
+        return wordText;
     }
-
-    public String getPartOfSpeech() {
-        return partOfSpeech;
+    
+    public void setWordText(String wordText) {
+        this.wordText = wordText;
     }
 
     public String getDefinition() {
         return definition;
     }
 
-    public ArrayList<Word> getSynonyms() {
-        return synonyms;
+    public void setDefinition(String definition) {
+        this.definition = definition;
     }
 
-    public void addSynonym(Word synonym) {
-        synonyms.add(synonym);
+    public String getPartOfSpeech() {
+        return partOfSpeech;
     }
 
-    public ArrayList<Lesson> getLessonsIntroduced() {
-        return lessonsIntroduced;
+    public void setPartOfSpeech(String partOfSpeech) {
+        this.partOfSpeech = partOfSpeech;
     }
 
-    public void addLessonIntroduced(Lesson lesson) {
-        lessonsIntroduced.add(lesson);
+    public ArrayList<String> getTranslations() {
+        return translations;
     }
 
-    public UUID generateUUID() {
-        return UUID.randomUUID();
+    public void addTranslation(String translation) {
+        if (!translations.contains(translation)) {
+            translations.add(translation);
+        }
     }
 
-    public void setUUID() {
-        this.id = generateUUID();
+    public void removeTranslation(String translation) {
+        translations.remove(translation);
+    }
+
+    // Get the language of the word
+    public String getLanguage() {
+        return language;
+    }
+
+    // Set the language of the word
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    @Override
+    public String toString() {
+        return "Word: " + wordText + "\nDefinition: " + definition + "\nPart of Speech: " + partOfSpeech + "\nLanguage: " + language + "\nTranslations: " + translations;
     }
 }

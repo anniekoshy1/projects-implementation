@@ -2,8 +2,8 @@ import java.util.ArrayList;
 
 public class LanguageList {
 
-    private static LanguageList instance;
-    private ArrayList<Language> languages;
+    private static LanguageList instance;  
+    private ArrayList<Language> languages; 
 
     private LanguageList() {
         languages = new ArrayList<>();
@@ -16,38 +16,37 @@ public class LanguageList {
         return instance;
     }
 
-    public Language addLanguage(Language language) {
-        if (language != null && !languages.contains(language)) {
-            languages.add(language);
-            save(); 
-            return language;
-        }
-        return null;
+    // Add a language to the list
+    public void addLanguage(Language language) {
+        languages.add(language);
     }
 
+    // Remove a language from the list
+    public boolean removeLanguage(Language language) {
+        return languages.remove(language);
+    }
+
+    // Get the list of all languages
     public ArrayList<Language> getLanguages() {
-        return new ArrayList<>(languages);
+        return languages;
     }
 
-    public Language getLanguageByName(String name) {
+    public Language findLanguageByName(String name) {
         for (Language language : languages) {
             if (language.getName().equalsIgnoreCase(name)) {
                 return language;
             }
         }
-        return null; 
+        return null;
     }
 
-    public boolean removeLanguage(Language language) {
-        boolean removed = languages.remove(language);
-        if (removed) {
-            save(); 
+    public ArrayList<Language> findLanguagesByKeyWord(String keyWord) {
+        ArrayList<Language> matchingLanguages = new ArrayList<>();
+        for (Language language : languages) {
+            if (language.getKeyWords().contains(keyWord)) {
+                matchingLanguages.add(language);
+            }
         }
-        return removed;
-    }
-
-    public void save() {
-        DataWriter dataWriter = new DataWriter();
-        dataWriter.saveLanguages(languages);
+        return matchingLanguages;
     }
 }
