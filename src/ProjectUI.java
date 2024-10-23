@@ -80,9 +80,13 @@ private void login() {
     User user = language.login(userName, password); // Store the returned User object
 
     if (user != null) { // Check if the user is not null
-        System.out.println("Welcome " + user.getUsername() + "!"); // Welcome message using the retrieved User object
+        if (user.getCurrentLanguage() != null) {
+        System.out.println("Welcome " + user.getUsername() + "Your selected language is " + user.getCurrentLanguage().getName() + "."); // Welcome message using the retrieved User object
     } else {
-        System.out.println("Sorry, invalid username or password."); // Updated message for clarity
+        System.out.println("Welcome" + user.getUsername() + "!"); 
+    }
+    } else {
+        System.out.println("Sorry, invalid username or password.");
     }
 }
 

@@ -14,7 +14,6 @@ public class User {
     private UUID currentCourseID;
     private ArrayList<Language> languages;
     private UUID currentLanguageID;
-    private String currentLanguageName;
 
     public User(UUID id, String username, String email, String password, ArrayList<Course> courses, Map<UUID, Double> progress, ArrayList<UUID> completedCourses, UUID currentCourseID, ArrayList<Language> languages, UUID currentLanguageID, String currentLanguageName) {
         this.id = id;
@@ -27,20 +26,6 @@ public class User {
         this.currentCourseID = currentCourseID;
         this.languages = languages;
         this.currentLanguageID = currentLanguageID;
-        this.currentLanguageName = currentLanguageName;
-    }
-    public User(UUID id, String username, String email, String password, ArrayList<Course> courses, Map<UUID, Double> progress, ArrayList<UUID> completedCourses, UUID currentCourseID, ArrayList<Language> languages, UUID currentLanguageID, String currentLanguageName) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.courses = courses;
-        this.progress = progress;
-        this.completedCourses = completedCourses;
-        this.currentCourseID = currentCourseID;
-        this.languages = languages;
-        this.currentLanguageID = currentLanguageID;
-        this.currentLanguageName = currentLanguageName;
     }
     
 

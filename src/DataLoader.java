@@ -9,28 +9,16 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import java.nio.file.Paths;
+import java.nio.file.Files;
 
 
 public class DataLoader {
     private static final String USERS_FILE = "docs/JSON/User.json";
     private static final String COURSES_FILE = "docs/JSON/Courses.json";
+    private static final String LANGUAGES_FILE = "docs/JSON/Language.json";
+
     private ArrayList<User> users = new ArrayList<>();
-
-    public static void main(String[] args) {
-        // DataLoader dataLoader = new DataLoader();
-        // ArrayList<User> userList = dataLoader.getUserList();
-
-        // for (int i = 0; i < Math.min(userList.size(), 8); i++) {
-        //     User user = userList.get(i);
-        //     System.out.println("Username: " + user.getUsername() + ", Password: " + user.getPassword());
-        // }
-
-        // User user2 = userList.get(1); 
-        // System.out.println("\n--- Displaying User2 ---");
-        // System.out.println("Username: " + user2.getUsername() + ", Password: " + user2.getPassword());
-
-        // System.out.println("Program terminated.");
-    }
 
     //done
     public ArrayList<User> getUsers() {
@@ -185,8 +173,73 @@ public class DataLoader {
     }
 
     //done
-    public ArrayList<Language> getLanguages() {
-        return new ArrayList<>();
+ public ArrayList<Language> getLanguages() {
+        ArrayList<Language> languages = new ArrayList<>();
+        JSONParser jsonParser = new JSONParser();
+
+        try (FileReader fileReader = new FileReader(LANGUAGES_FILE)) {
+            // Parse the JSON file into an Object.
+            Object obj = jsonParser.parse(fileReader);
+            // Cast the parsed object into a JSONArray.
+            JSONArray languageArray = (JSONArray) obj;
+
+            // Iterate through each object in the JSONArray.
+            for (Object languageObject : languageArray) {
+                // Cast each object into a JSONObject.
+                JSONObject languageJson = (JSONObject) languageObject;
+
+                // Extract language attributes from the JSONObject.
+                UUID languageId = UUID.fromString((String) languageJson.get("languageId"));
+                String name = (String) languageJson.get("name");
+                String user = (String) languageJson.get("user");
+                double coursePercentage = Double.parseDouble(((String) languageJson.get("coursePercentage")).replace("%", ""));
+                double totalPercentage = Double.parseDouble(((String) languageJson.get("totalPercentage")).replace("%", ""));
+                double languageProgress = Double.parseDouble(((String) languageJson.get("languageProgress")).replace("%", ""));
+
+                // Parse keywords
+                JSONArray keywordsJson = (JSONArray) languageJson.get("keywords");
+                ArrayList<String> keywords = new ArrayList<>();
+                for (Object keyword : keywordsJson) {
+                    keywords.add((String) keyword);
+                }
+
+                // Parse completedCourses
+                JSONArray completedCoursesJson = (JSONArray) languageJson.get("completedCourses");
+                ArrayList<UUID> completedCourses = new ArrayList<>();
+                for (Object courseId : completedCoursesJson) {
+                    completedCourses.add(UUID.fromString((String) courseId));
+                }
+
+                // Parse completedAssessments
+                JSONArray completedAssessmentsJson = (JSONArray) languageJson.get("completedAssessments");
+                ArrayList<Assessment> completedAssessments = new ArrayList<>();
+                for (Object assessmentObject : completedAssessmentsJson) {
+                    JSONObject assessmentJson = (JSONObject) assessmentObject;
+                    UUID assessmentId = UUID.fromString((String) assessmentJson.get("assessmentID"));
+                    double score = Double.parseDouble(((String) assessmentJson.get("score")).replace("%", ""));
+                    Assessment assessment = new Assessment(assessmentID, score);
+                    completedAssessments.add(assessment);
+                }
+
+                // Parse courseAccess
+                JSONObject courseAccessJson = (JSONObject) languageJson.get("courseAccess");
+                Map<UUID, Boolean> courseAccess = new HashMap<>();
+                for (Object key : courseAccessJson.keySet()) {
+                    UUID courseId = UUID.fromString((String) key);
+                    Boolean access = Boolean.parseBoolean((String) courseAccessJson.get(key));
+                    courseAccess.put(courseId, access);
+                }
+
+                // Create the Language object and add it to the list.
+                Language language = new Language(languageId, name);
+                languages.add(language);
+            }
+
+            System.out.println("Languages loaded successfully.");
+        } catch (IOException | ParseException e) {
+            System.err.println("Error loading languages: " + e.getMessage());
+        }
+        return languages;
     }
 
     //done

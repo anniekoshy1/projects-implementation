@@ -20,6 +20,7 @@ public class LanguageLearningFacade {
         User user = userList.getUser(username, password);
         if (user != null) {
             this.user = user;
+            this.langauge = user.getCurrentLanguage;
         }
         return user;
     }

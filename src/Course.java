@@ -11,16 +11,19 @@ public class Course {
     private ArrayList<Assessment> assessments;
     private ArrayList<String> keyWords;
     private UUID id;
+    private boolean completed;  // This tracks whether the course is completed
 
+    // Default constructor
     public Course(User user) {
         this.name = "Default Course Name";
         this.description = "Default Description";
         this.userAccess = false;
-        this.courseProgress = 0.0; 
+        this.courseProgress = 0.0;
         this.lessons = new ArrayList<>();
         this.assessments = new ArrayList<>();
         this.keyWords = new ArrayList<>();
         this.id = UUID.randomUUID();
+        this.completed = false;  // Initialize completed as false
     }
 
     public Course(UUID id, String name, String description, boolean userAccess, double progress, boolean completed, ArrayList<Lesson> lessons, ArrayList<Assessment> assessments){
@@ -29,7 +32,8 @@ public class Course {
         this.description = description;
         this.userAccess = userAccess;
         this.courseProgress = progress;
-        this.completed = lessons;
+        this.completed = completed;  // Set the completed status
+        this.lessons = lessons;  // Set the lessons list
         this.assessments = assessments;
     }
 
@@ -38,6 +42,7 @@ public class Course {
         this.courseProgress = courseProgress;
     }
 
+    // Getters and setters
     public String getName() {
         return name;
     }
@@ -70,18 +75,16 @@ public class Course {
         return userAccess;
     }
 
-    private boolean completed;
+    public void setUserAccess(boolean access) {
+        this.userAccess = access;
+    }
 
     public boolean isCompleted(){
-        return completed;
+        return completed;  // Check if the course is completed
     }
 
     public void setCompleted(boolean completed){
-        this.completed = completed;
-    }
-
-    public void setUserAccess(boolean access) {
-        this.userAccess = access;
+        this.completed = completed;  // Set course as completed or not
     }
 
     public ArrayList<Lesson> getAllLessons() {
@@ -120,11 +123,14 @@ public class Course {
         this.id = id;
     }
 
+    // Method to check if the course is fully completed based on progress
     public boolean completedCourse() {
         return courseProgress == 100.0;
     }
 
+    // Mark course as completed
     public void setCompletedCourse() {
         this.courseProgress = 100.0;
+        this.completed = true;  // Mark the course as completed
     }
 }
