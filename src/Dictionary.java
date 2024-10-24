@@ -1,59 +1,72 @@
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Dictionary {
 
-    private HashMap<Word, Word> fromEnglish;
-    private ArrayList<String> languages;
-    private HashMap<Lesson, ArrayList<Word>> lessonWords;
+    private WordsList wordsList;  
+    private Map<String, String> translationMap;  // Map to store translations (e.g., "hello" -> "hola")
 
-    public Dictionary(ArrayList<String> languages) {
-        this.languages = languages;
-        this.fromEnglish = new HashMap<>();
-        this.lessonWords = new HashMap<>();
-    }
+    // Constructor that takes in a WordsList
+    public Dictionary(WordsList wordsList) {
+        this.wordsList = wordsList;
+        this.translationMap = new HashMap<>();
 
-    public void addWord(Word englishWord, Word translatedWord) {
-        fromEnglish.put(englishWord, translatedWord);
-    }
-
-    public void removeWord(Word englishWord) {
-        fromEnglish.remove(englishWord);
-    }
-
-    // Get the translation of a word from English to a target language
-    public Word getTranslation(Word englishWord, String targetLanguage) {
-        Word translatedWord = fromEnglish.get(englishWord);
-        if (translatedWord != null && translatedWord.getLanguage().equalsIgnoreCase(targetLanguage)) {
-            return translatedWord;
-        }
-        return null;  // Return null if no translation is found
-    }
-
-    // Get all words associated with a specific lesson
-    public ArrayList<Word> getWordsForLesson(Lesson lesson) {
-        return lessonWords.getOrDefault(lesson, new ArrayList<>());
-    }
-
-    // Add a list of words to a specific lesson
-    public void addWordsToLesson(Lesson lesson, ArrayList<Word> words) {
-        lessonWords.put(lesson, words);
-    }
-
-    // Get all translations in the dictionary (for all languages)
-    public HashMap<Word, Word> getAllTranslations() {
-        return fromEnglish;
-    }
-
-    // Add a new language to the list of available languages
-    public void addLanguage(String language) {
-        if (!languages.contains(language)) {
-            languages.add(language);
+        // Populate the translation map with words from WordsList
+        for (Word word : wordsList.getAllWords()) {
+            translationMap.put(word.getWordText().toLowerCase(), word.getTranslation().toLowerCase());
         }
     }
 
-    // Get the list of available languages
-    public ArrayList<String> getAvailableLanguages() {
-        return languages;
+    // Method to translate a word from the source language to the target language
+    public String translate(String word) {
+        // Convert to lowercase for consistent lookup
+        word = word.toLowerCase();
+
+        // Check if the word exists in the translation map
+        if (translationMap.containsKey(word)) {
+            return translationMap.get(word); 
+        } else {
+            return "Translation not found!";
+        }
+    }
+
+    // Method to translate a list of words
+    public Map<String, String> translate(List<String> words) {
+        Map<String, String> translations = new HashMap<>();
+
+        for (String word : words) {
+            translations.put(word, translate(word));
+        }
+
+        return translations;
+    }
+
+    // Method to add a new word and its translation to the dictionary
+    public void addTranslation(Word word) {
+        wordsList.addWord(word);  // Add to WordsList
+        translationMap.put(word.getWordText().toLowerCase(), word.getTranslation().toLowerCase());  // Add to translation map
+    }
+
+    // Method to remove a word from the dictionary
+    public void removeTranslation(String wordText) {
+        String finalWordText = wordText.toLowerCase();
+
+        // Find the word in the WordsList and remove it
+        List<Word> words = wordsList.getAllWords();
+        words.removeIf(word -> word.getWordText().equalsIgnoreCase(finalWordText));
+
+        // Remove the word from the translation map
+        translationMap.remove(finalWordText);
+    }
+
+    // Retrieve the number of words in the dictionary
+    public int getWordCount() {
+        return wordsList.getAllWords().size();
+    }
+
+    // Get all translations
+    public Map<String, String> getAllTranslations() {
+        return new HashMap<>(translationMap);  // Return a copy of the translation map
     }
 }

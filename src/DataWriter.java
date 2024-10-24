@@ -83,7 +83,7 @@ public class DataWriter {
             courseJson.put("description", course.getDescription());
             courseJson.put("userAccess", course.getUserAccess());
             courseJson.put("courseProgress", course.getCourseProgress());
-            courseJson.put("completed", course.isCompleted());
+            courseJson.put("completed", course.isCompletedCourse());
 
             JSONArray lessonsJson = new JSONArray();
             for (Lesson lesson : course.getAllLessons()) {

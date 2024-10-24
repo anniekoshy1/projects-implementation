@@ -4,10 +4,11 @@ import java.util.UUID;
 public class Word {
 
     private UUID id; 
+    private String translation;
     private String wordText;  // The word
     private String definition;  // The definition or meaning of the word
     private String partOfSpeech;  // The part of speech of the word 
-    private ArrayList<String> translations;  
+    private ArrayList<String> translations;
     private String language;  // The language of the word
 
     public Word(String wordText, String definition, String partOfSpeech, String language) {
@@ -16,11 +17,14 @@ public class Word {
         this.definition = definition;
         this.partOfSpeech = partOfSpeech;
         this.language = language;
-        this.translations = new ArrayList<>();
     }
 
     public UUID getId() {
         return id;
+    }
+
+    public String getTranslation() {
+        return this.translation;
     }
 
     public String getWordText() {

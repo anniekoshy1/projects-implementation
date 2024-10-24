@@ -1,5 +1,8 @@
+import java.util.UUID;
+
 public class Questions {
 
+    private UUID questionID;
     private String questionText;  // The text of the question
     private boolean correctAnswer;  // The correct answer for the question
     private String userAnswer;  // The answer provided by the user
@@ -10,6 +13,8 @@ public class Questions {
         this.correctAnswer = correctAnswer;
         this.difficulty = difficulty;
         this.userAnswer = "";
+        this.questionID = UUID.randomUUID();
+
     }
 
     // Get the text of the question
@@ -43,8 +48,8 @@ public class Questions {
     }
 
     // Check if the user's answer is correct
-        public boolean checkAnswers() {
-           return userAnswer.equalsIgnoreCase(Boolean.toString(correctAnswer));
+    public boolean checkAnswers() {
+        return userAnswer.equalsIgnoreCase(Boolean.toString(correctAnswer));
     }
 
     // Get the difficulty level of the question

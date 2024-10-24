@@ -3,7 +3,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class Language {
-
+ 
     private UUID id; 
     private User user;  // The user who is learning the language
     private StarterTest starterTest;  // The initial test for placement
@@ -15,7 +15,7 @@ public class Language {
     private ArrayList<Course> completedCourses;  // List of completed courses
     private ArrayList<Assessment> completedAssessments;  // List of completed assessments
     private HashMap<Course, Boolean> courseAccess;
-    private Dictionary dictionary;  // Dictionary of words for the language
+    private Dictionary dictionary;
 
     public Language(User user, String name) {
         this.id = UUID.randomUUID();
@@ -28,15 +28,24 @@ public class Language {
         this.completedCourses = new ArrayList<>();
         this.completedAssessments = new ArrayList<>();
         this.courseAccess = new HashMap<>();
-        this.dictionary = new Dictionary(new ArrayList<>());
+        this.dictionary = new Dictionary(new WordsList());
     }
     public Language(UUID id, String name) {
         this.id = id;
         this.name = name;
     }
+
     // Get the name of the language
     public String getName() {
         return name;
+    }
+
+    public User getUser(){
+        return user;
+    }
+
+    public void setUser (User user){
+        this.user = user;
     }
 
     // Set access to a specific course
@@ -76,6 +85,7 @@ public class Language {
         updateCoursePercentage();
     }
 
+
     public boolean takenStarterTest() {
         return starterTest != null;
     }
@@ -100,5 +110,13 @@ public class Language {
 
     public ArrayList<String> getKeyWords() {
         return keyWords;
+    }
+
+    public void addCompletedAssessment(Assessment assessment) {
+        completedAssessments.add(assessment);
+    }
+
+    public ArrayList<Assessment> getCompletedAssessments() {
+        return completedAssessments;
     }
 }

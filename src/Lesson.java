@@ -25,7 +25,7 @@ public class Lesson {
         this.culturalFigures = new ArrayList<>();
         this.holidays = new ArrayList<>();
         this.foods = new ArrayList<>();
-        this.topic = new Dictionary(new ArrayList<>());
+        this.topic = new Dictionary(new WordsList());
     }
 
     public Lesson(UUID id, double lessonProgress, String description) {
@@ -38,7 +38,7 @@ public class Lesson {
         this.culturalFigures = new ArrayList<>();
         this.holidays = new ArrayList<>();
         this.foods = new ArrayList<>();
-        this.topic = new Dictionary(new ArrayList<>());
+        this.topic = new Dictionary(new WordsList());
     }
 
     public UUID getId() {

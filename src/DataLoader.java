@@ -132,7 +132,7 @@ public class DataLoader {
                     assessments.add(new Assessment(assessmentID, Assessment.AssessmentType.valueOf(type), null)); 
                 }
 
-                courses.add(new Course(courseID, name, description, userAccess, courseProgress, completed, lessons, assessments));
+                courses.add(new Course(courseID, name, description, userAccess, courseProgress, completed, lessons, assessments, new ArrayList<>()));
             }
 
             System.out.println("Courses loaded successfully.");
