@@ -13,7 +13,7 @@ public class Lesson {
     private ArrayList<String> holidays;  // Holidays discussed in the lesson
     private ArrayList<String> foods;  // Foods associated with the lesson
     private Dictionary topic;  // Dictionary of words related to the lesson
-    private boolean completed;
+    private boolean completed; 
 
     public Lesson(String description) {
         this.id = UUID.randomUUID();
@@ -144,6 +144,10 @@ public class Lesson {
         if (completed) {
             this.lessonProgress = 100.0;  // If the course is marked completed, set progress to 100%
         }
+    }
+
+    public boolean isCompleted() {
+        return completed;
     }
 
     // Get the next lesson in a course

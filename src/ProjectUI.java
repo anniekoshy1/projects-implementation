@@ -187,9 +187,15 @@ public class ProjectUI {
 
      private void loadQuestionsFromJson(Assessment assessment) {
         facade.loadAssessmentQuestions(assessment.getId());
+        
         System.out.println("Questions loaded from JSON:");
-        for (Questions question : assessment.getQuestions()) {
-            System.out.println(question.getQuestionText()); 
+        
+        if (assessment.getQuestions() != null && !assessment.getQuestions().isEmpty()) {
+            for (Questions question : assessment.getQuestions()) {
+                System.out.println(question.getQuestionText()); 
+            }
+        } else {
+            System.out.println("No questions available for this assessment.");
         }
     }
 

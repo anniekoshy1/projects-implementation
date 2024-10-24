@@ -12,7 +12,11 @@ public class DataWriter {
     private static final String USERS_FILE = "docs/JSON/User.json";
     private static final String COURSES_FILE = "docs/JSON/Courses.json";
     private static final String LANGUAGES_FILE = "docs/JSON/Languages.json";
+    private static final String WORDS_FILE = "docs/JSON/words.json";
+    private static final String PHRASES_FILE = "docs/JSON/phrases.json";
 
+
+    //done
     public boolean saveUsers(ArrayList<User> users) {
         JSONArray userArray = new JSONArray();
 
@@ -68,6 +72,7 @@ public class DataWriter {
         return writeToFile(USERS_FILE, userArray);
     }
 
+    //done
     public boolean saveCourses(ArrayList<Course> courses) {
         JSONArray courseArray = new JSONArray();
 
@@ -106,6 +111,7 @@ public class DataWriter {
         return writeToFile(COURSES_FILE, courseArray);
     }
 
+    //done
     public boolean saveLanguages(ArrayList<Language> languages) {
         JSONArray languageArray = new JSONArray();
 
@@ -119,6 +125,7 @@ public class DataWriter {
         return writeToFile(LANGUAGES_FILE, languageArray);
     }
 
+    //done
     public void saveUserProgress(User user) {
         ArrayList<User> users = new DataLoader().getUsers();
         for (User existingUser : users) {
@@ -130,6 +137,7 @@ public class DataWriter {
         saveUsers(users);
     }
 
+    //done
     public void saveAssessmentHistory(User user, Assessment assessment) {
         ArrayList<User> users = new DataLoader().getUsers();
         for (User existingUser : users) {
@@ -140,6 +148,7 @@ public class DataWriter {
         saveUsers(users);
     }
 
+    //done
     private boolean writeToFile(String filePath, JSONArray jsonArray) {
         try (FileWriter file = new FileWriter(filePath)) {
             file.write(jsonArray.toJSONString());
@@ -148,6 +157,43 @@ public class DataWriter {
         } catch (IOException e) {
             System.err.println("Error writing to file: " + e.getMessage());
             return false;
+        }
+    }
+
+    // Save words to the JSON file
+    public void saveWords(WordsList wordsList) {
+        JSONArray wordsArray = new JSONArray();
+        for (Word word : wordsList.getAllWords()) {
+            JSONObject wordObj = new JSONObject();
+            wordObj.put("word", word.getWordText());
+            wordObj.put("definition", word.getDefinition());
+            wordObj.put("partOfSpeech", word.getPartOfSpeech());
+            wordObj.put("language", word.getLanguage());
+            wordsArray.add(wordObj);
+        }
+
+        try (FileWriter writer = new FileWriter(WORDS_FILE)) {
+            writer.write(wordsArray.toJSONString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Save phrases to the JSON file
+    public void savePhrases(PhraseList phraseList) {
+        JSONArray phrasesArray = new JSONArray();
+        for (Phrase phrase : phraseList.getAllPhrases()) {
+            JSONObject phraseObj = new JSONObject();
+            phraseObj.put("phrase", phrase.getPhraseText());
+            phraseObj.put("definition", phrase.getDefinition());
+            phraseObj.put("partOfSpeech", phrase.getPartOfSpeech());
+            phrasesArray.add(phraseObj);
+        }
+
+        try (FileWriter writer = new FileWriter(PHRASES_FILE)) {
+            writer.write(phrasesArray.toJSONString());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

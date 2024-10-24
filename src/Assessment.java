@@ -30,7 +30,7 @@ public class Assessment {
         int correctAnswers = 0;
         for (Questions question : questions) {
             if (question.checkAnswers()) {
-                correctAnswers++;
+                correctAnswers+=5;
             }
         }
         this.userScore = (int) ((double) correctAnswers / questions.size() * 100);  // Calculate score as a percentage
@@ -51,7 +51,7 @@ public class Assessment {
             return 1;  // 1-star rating
         }
     }
-
+    
     public void retakeAssessment() {
         attempts++; 
         this.userScore = 0;  // Reset the score for the retake

@@ -39,7 +39,6 @@ public class MultipleChoiceQuestion {
         return correctAnswer;
     }
 
-    // Reset the user's answer for retrying the question
     public void reset() {
         this.userAnswer = "";
     }

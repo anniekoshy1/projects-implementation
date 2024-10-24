@@ -42,6 +42,7 @@ public class Course {
         this.id = id;
         this.courseProgress = courseProgress;
     }
+    
     public double getCourseProgress() {
         return this.courseProgress;
     }

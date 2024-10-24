@@ -137,5 +137,7 @@ public class LanguageLearningFacade {
 
     public void loadAssessmentQuestions(UUID assessmentId) {
         String assessmentIDSTR = assessmentId.toString();
+
+        Assessment assessment = dataLoader.loadAssessmentById(assessmentIDSTR);
     }
 }

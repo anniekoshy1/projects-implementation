@@ -14,6 +14,9 @@ public class DataLoader {
     private static final String USERS_FILE = "docs/JSON/User.json";
     private static final String COURSES_FILE = "docs/JSON/Courses.json";
     private static final String LANGUAGES_FILE = "docs/JSON/Languages.json";
+    private static final String WORDS_FILE = "docs/JSON/words.json";
+    private static final String PHRASES_FILE = "docs/JSON/phrases.json";
+
 
     public ArrayList<User> getUsers() {
         ArrayList<User> users = new ArrayList<>();
@@ -192,6 +195,52 @@ public class DataLoader {
         } catch (IOException | ParseException e) {
             System.err.println("Error loading user progress: " + e.getMessage());
         }
+    }
+
+    public WordsList loadWords() {
+        WordsList wordsList = new WordsList();
+        JSONParser parser = new JSONParser();
+
+        try (FileReader reader = new FileReader(WORDS_FILE)) {
+            JSONArray wordsArray = (JSONArray) parser.parse(reader);
+            for (Object obj : wordsArray) {
+                JSONObject wordObj = (JSONObject) obj;
+                String wordText = (String) wordObj.get("word");
+                String definition = (String) wordObj.get("definition");
+                String partOfSpeech = (String) wordObj.get("partOfSpeech");
+                String language = (String) wordObj.get("language");
+
+                Word word = new Word(wordText, definition, partOfSpeech, language);
+                wordsList.addWord(word);
+            }
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+
+        return wordsList;
+    }
+
+    // Load phrases from the JSON file
+    public PhraseList loadPhrases() {
+        PhraseList phraseList = new PhraseList();
+        JSONParser parser = new JSONParser();
+
+        try (FileReader reader = new FileReader(PHRASES_FILE)) {
+            JSONArray phrasesArray = (JSONArray) parser.parse(reader);
+            for (Object obj : phrasesArray) {
+                JSONObject phraseObj = (JSONObject) obj;
+                String phraseText = (String) phraseObj.get("phrase");
+                String definition = (String) phraseObj.get("definition");
+                String partOfSpeech = (String) phraseObj.get("partOfSpeech");
+
+                Phrase phrase = new Phrase(phraseText, definition, partOfSpeech);
+                phraseList.addPhrase(phrase);
+            }
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+
+        return phraseList;
     }
 
     public void saveCourses(ArrayList<Course> courses) {

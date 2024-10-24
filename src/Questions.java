@@ -43,9 +43,9 @@ public class Questions {
     }
 
     // Check if the user's answer is correct
-public boolean checkAnswers() {
-    return userAnswer.equalsIgnoreCase(Boolean.toString(correctAnswer));
-}
+        public boolean checkAnswers() {
+           return userAnswer.equalsIgnoreCase(Boolean.toString(correctAnswer));
+    }
 
     // Get the difficulty level of the question
     public Difficulty getDifficulty() {
